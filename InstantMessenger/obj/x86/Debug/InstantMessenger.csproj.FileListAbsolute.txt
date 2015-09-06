@@ -1,0 +1,11 @@
+C:\Great_Messenger\Great_Messenger\InstantMessenger\bin\Debug\InstantMessenger.exe.config
+C:\Great_Messenger\Great_Messenger\InstantMessenger\bin\Debug\InstantMessenger.exe
+C:\Great_Messenger\Great_Messenger\InstantMessenger\bin\Debug\InstantMessenger.pdb
+C:\Great_Messenger\Great_Messenger\InstantMessenger\obj\x86\Debug\InstantMessenger.csprojResolveAssemblyReference.cache
+C:\Great_Messenger\Great_Messenger\InstantMessenger\obj\x86\Debug\InstantMessenger.Form1.resources
+C:\Great_Messenger\Great_Messenger\InstantMessenger\obj\x86\Debug\InstantMessenger.LogRegForm.resources
+C:\Great_Messenger\Great_Messenger\InstantMessenger\obj\x86\Debug\InstantMessenger.Properties.Resources.resources
+C:\Great_Messenger\Great_Messenger\InstantMessenger\obj\x86\Debug\InstantMessenger.TalkForm.resources
+C:\Great_Messenger\Great_Messenger\InstantMessenger\obj\x86\Debug\InstantMessenger.csproj.GenerateResource.Cache
+C:\Great_Messenger\Great_Messenger\InstantMessenger\obj\x86\Debug\InstantMessenger.exe
+C:\Great_Messenger\Great_Messenger\InstantMessenger\obj\x86\Debug\InstantMessenger.pdb

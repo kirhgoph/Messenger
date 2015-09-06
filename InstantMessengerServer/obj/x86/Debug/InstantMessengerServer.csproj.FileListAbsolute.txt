@@ -1,0 +1,16 @@
+C:\Great_Messenger\Great_Messenger\InstantMessengerServer\bin\Debug\server.pfx
+C:\Great_Messenger\Great_Messenger\InstantMessengerServer\bin\Debug\tools\generate_cert.bat
+C:\Great_Messenger\Great_Messenger\InstantMessengerServer\bin\Debug\InstantMessengerServer.exe
+C:\Great_Messenger\Great_Messenger\InstantMessengerServer\bin\Debug\InstantMessengerServer.pdb
+C:\Great_Messenger\Great_Messenger\InstantMessengerServer\obj\x86\Debug\InstantMessengerServer.csprojResolveAssemblyReference.cache
+C:\Great_Messenger\Great_Messenger\InstantMessengerServer\obj\x86\Debug\InstantMessengerServer.exe
+C:\Great_Messenger\Great_Messenger\InstantMessengerServer\obj\x86\Debug\InstantMessengerServer.pdb
+C:\Great_Messenger\GreatMessenger\InstantMessengerServer\obj\x86\Debug\InstantMessengerServer.exe
+C:\Great_Messenger\GreatMessenger\InstantMessengerServer\obj\x86\Debug\InstantMessengerServer.pdb
+C:\Messenger\Messenger\InstantMessengerServer\obj\x86\Debug\InstantMessengerServer.exe
+C:\Messenger\Messenger\InstantMessengerServer\obj\x86\Debug\InstantMessengerServer.pdb
+C:\Messenger\Messenger\InstantMessengerServer\bin\Debug\server.pfx
+C:\Messenger\Messenger\InstantMessengerServer\bin\Debug\tools\generate_cert.bat
+C:\Messenger\Messenger\InstantMessengerServer\bin\Debug\InstantMessengerServer.exe
+C:\Messenger\Messenger\InstantMessengerServer\bin\Debug\InstantMessengerServer.pdb
+C:\Messenger\Messenger\InstantMessengerServer\obj\x86\Debug\InstantMessengerServer.csprojResolveAssemblyReference.cache
