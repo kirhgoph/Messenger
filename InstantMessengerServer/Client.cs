@@ -7,6 +7,7 @@ using System.Net.Security;
 using System.Security.Authentication;
 using System.IO;
 using System.Threading;
+using System.Data.SqlClient;
 
 namespace InstantMessengerServer
 {
@@ -54,20 +55,22 @@ namespace InstantMessengerServer
                     byte logMode = br.ReadByte();
                     string userName = br.ReadString();
                     string password = br.ReadString();
-                    if (userName.Length < 10) // Isn't username too long?
+                    if (userName.Length < 50) // Isn't username too long?
                     {
-                        if (password.Length < 20)  // Isn't password too long?
+                        if (password.Length < 50)  // Isn't password too long?
                         {
+                            SqlCommand myCommand = new SqlCommand("select Login, Pass_hash from dbo.User where Login=" + userName, prog.SQLConnection);
+                            SqlDataReader myReader = myCommand.ExecuteReader();
                             if (logMode == IM_Register)  // Register mode
                             {
-                                if (!prog.users.ContainsKey(userName))  // User already exists?
+                                if (!myReader.HasRows)  // User already exists?
                                 {
                                     userInfo = new UserInfo(userName, password, this);
-                                    prog.users.Add(userName, userInfo);  // Add new user
+                                    myCommand.CommandText="INSERT INTO table dbo.User (Login, [e-mail], Pass_hash) values ('"+userName+"','"+userName+"','"+password+"')";
+                                    myCommand.ExecuteNonQuery();
                                     bw.Write(IM_OK);
                                     bw.Flush();
                                     Console.WriteLine("[{0}] ({1}) Registered new user", DateTime.Now, userName);
-                                    prog.SaveUsers();
                                     Receiver();  // Listen to client in loop.
                                 }
                                 else
@@ -75,7 +78,7 @@ namespace InstantMessengerServer
                             }
                             else if (logMode == IM_Login)  // Login mode
                             {
-                                if (prog.users.TryGetValue(userName, out userInfo))  // User exists?
+                                if (myReader.HasRows)  // User exists?
                                 {
                                     if (password == userInfo.Password)  // Is password OK?
                                     {
