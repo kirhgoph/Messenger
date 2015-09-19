@@ -37,7 +37,7 @@ namespace InstantMessengerServer
         public const int State_OK = 0;
         public const int State_TCPErr = 1;
         public const int State_SQLErr = 2;
-
+        public List<User> Users = new List<User>();
         public Program()
         {
             int state = State_OK;
@@ -46,7 +46,7 @@ namespace InstantMessengerServer
             Console.WriteLine("[{0}] Starting server...", DateTime.Now);
 
             SQLConnection = new SqlConnection("user id=sa;" +
-                                       "password=Informer1$;server=localhost;" +
+                                       "password=Informer1$;server=localhost\\SQLExpress;" +
                                        "Trusted_Connection=yes;" +
                                        "database=Messenger; " +
                                        "connection timeout=30");
@@ -87,5 +87,17 @@ namespace InstantMessengerServer
             }
         }
 
+    }
+    public class User
+    {
+        public int Id { get; set; }
+        public string First_Name { get; set; }
+        public string Last_name { get; set; }
+        public DateTime Birth_date { get; set; }
+        public string Pass_hash { get; set; }
+        public string Login { get; set; }
+        public string e_mail { get; set; }
+        public int Status { get; set; }
+        public DateTime Date_status { get; set; }
     }
 }

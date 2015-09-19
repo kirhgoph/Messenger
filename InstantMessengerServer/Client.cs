@@ -59,8 +59,11 @@ namespace InstantMessengerServer
                     {
                         if (password.Length < 50)  // Isn't password too long?
                         {
-                            SqlCommand myCommand = new SqlCommand("select Login, Pass_hash from dbo.User where Login=" + userName, prog.SQLConnection);
-                            SqlDataReader myReader = myCommand.ExecuteReader();
+                            SqlCommand myCommand = new SqlCommand("SELECT *  FROM [Messenger].[dbo].[User];", prog.SQLConnection);
+                            SqlDataReader myReader = null;
+                            myReader = myCommand.ExecuteReader();
+                            myReader.Read();
+                            prog.Users.Add(new User() {Id=myReader.GetInt32(0), First_Name=myReader.GetString(1), Last_name=myReader.GetString(2), Birth_date=myReader.GetDateTime(3), Pass_hash=myReader.GetString(4), Login=myReader.GetString(5), e_mail=myReader.GetString(6), Status=myReader.GetInt32(7), Date_status=myReader.GetDateTime(8)});
                             if (logMode == IM_Register)  // Register mode
                             {
                                 if (!myReader.HasRows)  // User already exists?
@@ -141,9 +144,11 @@ namespace InstantMessengerServer
                         bw.Write(who);
 
                         UserInfo info;
-                        if (prog.users.TryGetValue(who, out info))
+                        if (true)
+                        //if (prog.users.TryGetValue(who, out info))
                         {
-                            if (info.LoggedIn)
+                            if (true)
+                            //if (info.LoggedIn)
                                 bw.Write(true);   // Available
                             else
                                 bw.Write(false);  // Unavailable
@@ -158,17 +163,19 @@ namespace InstantMessengerServer
                         string msg = br.ReadString();
 
                         UserInfo recipient;
-                        if (prog.users.TryGetValue(to, out recipient))
+                        if (true)
+                        //if (prog.users.TryGetValue(to, out recipient))
                         {
                             // Is recipient logged in?
-                            if (recipient.LoggedIn)
+                            if (true)
+                            //if (recipient.LoggedIn)
                             {
                                 // Write received packet to recipient
-                                recipient.Connection.bw.Write(IM_Received);
-                                recipient.Connection.bw.Write(userInfo.UserName);  // From
-                                recipient.Connection.bw.Write(msg);
-                                recipient.Connection.bw.Flush();
-                                Console.WriteLine("[{0}] ({1} -> {2}) Message sent!", DateTime.Now, userInfo.UserName, recipient.UserName);
+              //                recipient.Connection.bw.Write(IM_Received);
+              //                recipient.Connection.bw.Write(userInfo.UserName);  // From
+              //                recipient.Connection.bw.Write(msg);
+              //                recipient.Connection.bw.Flush();
+              //                Console.WriteLine("[{0}] ({1} -> {2}) Message sent!", DateTime.Now, userInfo.UserName, recipient.UserName);
                             }
                         }
                     }
