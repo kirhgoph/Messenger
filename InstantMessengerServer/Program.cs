@@ -16,6 +16,25 @@ namespace InstantMessengerServer
 {
     public class Program
     {
+        void LoadUsers()
+        {
+            SqlCommand myCommand = new SqlCommand("SELECT *  FROM [Messenger].[dbo].[User];", SQLConnection);
+            SqlDataReader myReader = null;
+            myReader = myCommand.ExecuteReader();
+            myReader.Read();
+            Users.Add(new User() { Id = myReader.GetInt32(0), First_Name = myReader.GetString(1), Last_name = myReader.GetString(2), Birth_date = myReader.GetDateTime(3), Pass_hash = myReader.GetString(4), Login = myReader.GetString(5), e_mail = myReader.GetString(6), Status = myReader.GetInt32(7), Date_status = myReader.GetDateTime(8) });
+        }
+        void SaveUsers()
+        {
+            //SqlCommand myCommand = new SqlCommand("DELETE from table [Messenger].[dbo].[User];");
+            //myCommand.ExecuteNonQuery();
+            //myCommand.CommandText = "INSERT INTO table dbo.User (Login, [e-mail], Pass_hash) values ('" + userName + "','" + userName + "','" + password + "')";
+            //myCommand.ExecuteNonQuery();
+        }
+        public User FindLogin(string Login)
+        {
+            return Users.Find(p => p.Login == Login);
+        }
         static void Main(string[] args)
         {
             Program p = new Program();
@@ -59,7 +78,8 @@ namespace InstantMessengerServer
                 Console.WriteLine("[{0}] Error connecting to SQL server!", DateTime.Now);
                 state = State_SQLErr;
             }
-
+            LoadUsers();
+            Console.WriteLine("[{0}] Users were loaded successfully!", DateTime.Now);
             server = new TcpListener(ip, port);
             try
             {

@@ -29,7 +29,7 @@ namespace InstantMessengerServer
         public BinaryReader br;
         public BinaryWriter bw;
 
-        UserInfo userInfo;  // Information about current user.
+        User Logging = null;  // Information about current user.
         
         void SetupConn()  // Setup connection and login or register.
         {
@@ -53,27 +53,23 @@ namespace InstantMessengerServer
                 {
                     // Hello packet is OK. Time to wait for login or register.
                     byte logMode = br.ReadByte();
-                    string userName = br.ReadString();
+                    string Login = br.ReadString();
+                    //string e_mail = br.ReadString();
+                    string e_mail = Login;
                     string password = br.ReadString();
-                    if (userName.Length < 50) // Isn't username too long?
+                    Logging = prog.FindLogin(Login);
+                    if (Login.Length < 50) // Isn't username too long?
                     {
                         if (password.Length < 50)  // Isn't password too long?
                         {
-                            SqlCommand myCommand = new SqlCommand("SELECT *  FROM [Messenger].[dbo].[User];", prog.SQLConnection);
-                            SqlDataReader myReader = null;
-                            myReader = myCommand.ExecuteReader();
-                            myReader.Read();
-                            prog.Users.Add(new User() {Id=myReader.GetInt32(0), First_Name=myReader.GetString(1), Last_name=myReader.GetString(2), Birth_date=myReader.GetDateTime(3), Pass_hash=myReader.GetString(4), Login=myReader.GetString(5), e_mail=myReader.GetString(6), Status=myReader.GetInt32(7), Date_status=myReader.GetDateTime(8)});
                             if (logMode == IM_Register)  // Register mode
                             {
-                                if (!myReader.HasRows)  // User already exists?
+                                if (Logging==null)  // User already exists?
                                 {
-                                    userInfo = new UserInfo(userName, password, this);
-                                    myCommand.CommandText="INSERT INTO table dbo.User (Login, [e-mail], Pass_hash) values ('"+userName+"','"+userName+"','"+password+"')";
-                                    myCommand.ExecuteNonQuery();
+                                    prog.Users.Add(new User() { Id = prog.Users.Count, Pass_hash = password, Login = Login, e_mail = e_mail});
                                     bw.Write(IM_OK);
                                     bw.Flush();
-                                    Console.WriteLine("[{0}] ({1}) Registered new user", DateTime.Now, userName);
+                                    Console.WriteLine("[{0}] ({1}) Registered new user", DateTime.Now, Login);
                                     Receiver();  // Listen to client in loop.
                                 }
                                 else
@@ -81,9 +77,9 @@ namespace InstantMessengerServer
                             }
                             else if (logMode == IM_Login)  // Login mode
                             {
-                                if (myReader.HasRows)  // User exists?
+                                if (Logging != null)  // User exists?
                                 {
-                                    if (password == userInfo.Password)  // Is password OK?
+                                    if (password == Logging.Pass_hash)  // Is password OK?
                                     {
                                         // If user is logged in yet, disconnect him.
                                         if (userInfo.LoggedIn)
@@ -127,8 +123,8 @@ namespace InstantMessengerServer
         }
         void Receiver()  // Receive all incoming packets.
         {
-            Console.WriteLine("[{0}] ({1}) User logged in", DateTime.Now, userInfo.UserName);
-            userInfo.LoggedIn = true;
+            Console.WriteLine("[{0}] ({1}) User logged in", DateTime.Now, Logging.Login);
+            Logging.LoggedIn = true;
 
             try
             {
