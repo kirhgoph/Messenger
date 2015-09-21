@@ -82,10 +82,10 @@ namespace InstantMessengerServer
                                     if (password == Logging.Pass_hash)  // Is password OK?
                                     {
                                         // If user is logged in yet, disconnect him.
-                                        if (userInfo.LoggedIn)
-                                            userInfo.Connection.CloseConn();
+                                        if (Logging.Status!=0)
+                                            Logging.Connection.CloseConn();
 
-                                        userInfo.Connection = this;
+                                        Logging.Connection = this;
                                         bw.Write(IM_OK);
                                         bw.Flush();
                                         Receiver();  // Listen to client in loop.
@@ -111,7 +111,7 @@ namespace InstantMessengerServer
         {
             try
             {
-                userInfo.LoggedIn = false;
+                Logging.Status = 0;
                 br.Close();
                 bw.Close();
                 ssl.Close();
@@ -124,7 +124,7 @@ namespace InstantMessengerServer
         void Receiver()  // Receive all incoming packets.
         {
             Console.WriteLine("[{0}] ({1}) User logged in", DateTime.Now, Logging.Login);
-            Logging.LoggedIn = true;
+            Logging.Status = 1;
 
             try
             {
@@ -139,12 +139,10 @@ namespace InstantMessengerServer
                         bw.Write(IM_IsAvailable);
                         bw.Write(who);
 
-                        UserInfo info;
-                        if (true)
-                        //if (prog.users.TryGetValue(who, out info))
+                        User info=prog.Users.Find(p => p.Login == who);
+                        if (info!=null)
                         {
-                            if (true)
-                            //if (info.LoggedIn)
+                            if (info.Status==1)
                                 bw.Write(true);   // Available
                             else
                                 bw.Write(false);  // Unavailable
@@ -158,20 +156,18 @@ namespace InstantMessengerServer
                         string to = br.ReadString();
                         string msg = br.ReadString();
 
-                        UserInfo recipient;
-                        if (true)
-                        //if (prog.users.TryGetValue(to, out recipient))
+                        User recipient = prog.Users.Find(p => p.Login == to); ;
+                        if (recipient!=null)
                         {
                             // Is recipient logged in?
-                            if (true)
-                            //if (recipient.LoggedIn)
+                            if (recipient.Status!=0)
                             {
                                 // Write received packet to recipient
-              //                recipient.Connection.bw.Write(IM_Received);
-              //                recipient.Connection.bw.Write(userInfo.UserName);  // From
-              //                recipient.Connection.bw.Write(msg);
-              //                recipient.Connection.bw.Flush();
-              //                Console.WriteLine("[{0}] ({1} -> {2}) Message sent!", DateTime.Now, userInfo.UserName, recipient.UserName);
+                                recipient.Connection.bw.Write(IM_Received);
+                                recipient.Connection.bw.Write(Logging.Login);  // From
+                                recipient.Connection.bw.Write(msg);
+                                recipient.Connection.bw.Flush();
+                                Console.WriteLine("[{0}] ({1} -> {2}) Message sent!", DateTime.Now, Logging.Login, recipient.Login);
                             }
                         }
                     }
@@ -179,8 +175,8 @@ namespace InstantMessengerServer
             }
             catch (IOException) { }
 
-            userInfo.LoggedIn = false;
-            Console.WriteLine("[{0}] ({1}) User logged out", DateTime.Now, userInfo.UserName);
+            Logging.Status = 0;
+            Console.WriteLine("[{0}] ({1}) User logged out", DateTime.Now, Logging.Login);
         }
 
         public const int IM_Hello = 2012;      // Hello

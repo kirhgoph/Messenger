@@ -119,5 +119,6 @@ namespace InstantMessengerServer
         public string e_mail { get; set; }
         public int Status { get; set; }
         public DateTime Date_status { get; set; }
+        public Client Connection;
     }
 }
