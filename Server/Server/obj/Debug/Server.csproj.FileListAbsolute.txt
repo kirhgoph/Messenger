@@ -1,4 +1,0 @@
-C:\Great_Messenger\Great_Messenger\Server\Server\bin\Debug\Server.exe.config
-C:\Great_Messenger\Great_Messenger\Server\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
-C:\Great_Messenger\Great_Messenger\Server\Server\obj\Debug\Server.Properties.Resources.resources
-C:\Great_Messenger\Great_Messenger\Server\Server\obj\Debug\Server.csproj.GenerateResource.Cache

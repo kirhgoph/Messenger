@@ -57,6 +57,7 @@ namespace InstantMessengerServer
                     //string e_mail = br.ReadString();
                     string e_mail = Login;
                     string password = br.ReadString();
+                    prog.LoadUsers();
                     Logging = prog.FindLogin(Login);
                     if (Login.Length < 50) // Isn't username too long?
                     {
@@ -66,7 +67,9 @@ namespace InstantMessengerServer
                             {
                                 if (Logging==null)  // User already exists?
                                 {
-                                    prog.Users.Add(new User() { Id = prog.Users.Count, Pass_hash = password, Login = Login, e_mail = e_mail});
+                                    Logging = new User() { Id = prog.Users.Count, Pass_hash = password, Login = Login, e_mail = e_mail, Status = 11 };
+                                    prog.SaveUsers(Logging);
+                                    prog.Users.Add(Logging);
                                     bw.Write(IM_OK);
                                     bw.Flush();
                                     Console.WriteLine("[{0}] ({1}) Registered new user", DateTime.Now, Login);

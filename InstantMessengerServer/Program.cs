@@ -16,15 +16,86 @@ namespace InstantMessengerServer
 {
     public class Program
     {
-        void LoadUsers()
+        public string SafeGetString(SqlDataReader reader, int colIndex)
+        {
+            if (!reader.IsDBNull(colIndex))
+                return reader.GetString(colIndex);
+            else
+                return string.Empty;
+        }
+        public DateTime SafeGetDate(SqlDataReader reader, int colIndex)
+        {
+            if (!reader.IsDBNull(colIndex))
+                return reader.GetDateTime(colIndex);
+            else
+                return DateTime.MinValue;
+        }
+        public int SafeGetInt(SqlDataReader reader, int colIndex)
+        {
+            if (!reader.IsDBNull(colIndex))
+                return reader.GetInt32(colIndex);
+            else
+                return -1;
+        }
+        public void LoadUsers()
         {
             SqlCommand myCommand = new SqlCommand("SELECT *  FROM [Messenger].[dbo].[User];", SQLConnection);
             SqlDataReader myReader = null;
             myReader = myCommand.ExecuteReader();
-            myReader.Read();
-            Users.Add(new User() { Id = myReader.GetInt32(0), First_Name = myReader.GetString(1), Last_name = myReader.GetString(2), Birth_date = myReader.GetDateTime(3), Pass_hash = myReader.GetString(4), Login = myReader.GetString(5), e_mail = myReader.GetString(6), Status = myReader.GetInt32(7), Date_status = myReader.GetDateTime(8) });
+            try
+            { 
+            while (myReader.Read())
+                Users.Add(new User() { Id = SafeGetInt(myReader, 0), First_Name = SafeGetString(myReader, 1), Last_name = SafeGetString(myReader, 2), Birth_date = SafeGetDate(myReader, 3), Pass_hash = SafeGetString(myReader, 4), Login = SafeGetString(myReader, 5), e_mail = SafeGetString(myReader, 6), Status = SafeGetInt(myReader, 7), Date_status = SafeGetDate(myReader, 8) });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            myReader.Close();
         }
-        void SaveUsers()
+        public void SaveUsers(User user)
+        {
+            string com = "INSERT into [Messenger].[dbo].[User] (Id, Pass_hash,Login,[e-mail],Status) values(" + user.Id + "," + user.Pass_hash + "," + user.Login + "," + user.e_mail + ","+user.Status+");";
+            SqlCommand myCommand = new SqlCommand("INSERT into [Messenger].[dbo].[User] (Id, Pass_hash,Login,[e-mail],Status) values(" + user.Id + "," + user.Pass_hash + "," + user.Login + "," + user.e_mail + "," + user.Status + ");", SQLConnection);
+            try
+            {
+                myCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            //SqlCommand myCommand = new SqlCommand("DELETE from table [Messenger].[dbo].[User];");
+            //myCommand.ExecuteNonQuery();
+            //myCommand.CommandText = "INSERT INTO table dbo.User (Login, [e-mail], Pass_hash) values ('" + userName + "','" + userName + "','" + password + "')";
+            //myCommand.ExecuteNonQuery();
+        }
+        public void LoadContacts()
+        {
+            SqlCommand myCommand = new SqlCommand("SELECT *  FROM [Messenger].[dbo].[Contacts];", SQLConnection);
+            SqlDataReader myReader = null;
+            myReader = myCommand.ExecuteReader();
+            while (myReader.Read())
+            Contacts.Add(new Contact() { Id = myReader.GetInt32(0), Id_user= myReader.GetInt32(1), Id_contact = myReader.GetInt32(2), Id_grupp = myReader.GetInt32(3), Name_for_user = myReader.GetString(4)});
+            myReader.Close();
+        }
+        void SaveContacts()
+        {
+            //SqlCommand myCommand = new SqlCommand("DELETE from table [Messenger].[dbo].[User];");
+            //myCommand.ExecuteNonQuery();
+            //myCommand.CommandText = "INSERT INTO table dbo.User (Login, [e-mail], Pass_hash) values ('" + userName + "','" + userName + "','" + password + "')";
+            //myCommand.ExecuteNonQuery();
+        }
+        public void LoadGroups()
+        {
+            SqlCommand myCommand = new SqlCommand("SELECT *  FROM [Messenger].[dbo].[Grupps];", SQLConnection);
+            SqlDataReader myReader = null;
+            myReader = myCommand.ExecuteReader();
+            while (myReader.Read())
+                Groups.Add(new Group() { Id = myReader.GetInt32(0), Name = myReader.GetString(1)});
+            myReader.Close();
+        }
+        void SaveGroups()
         {
             //SqlCommand myCommand = new SqlCommand("DELETE from table [Messenger].[dbo].[User];");
             //myCommand.ExecuteNonQuery();
@@ -57,6 +128,8 @@ namespace InstantMessengerServer
         public const int State_TCPErr = 1;
         public const int State_SQLErr = 2;
         public List<User> Users = new List<User>();
+        public List<Contact> Contacts = new List<Contact>();
+        public List<Group> Groups= new List<Group>();
         public Program()
         {
             int state = State_OK;
@@ -78,8 +151,7 @@ namespace InstantMessengerServer
                 Console.WriteLine("[{0}] Error connecting to SQL server!", DateTime.Now);
                 state = State_SQLErr;
             }
-            LoadUsers();
-            Console.WriteLine("[{0}] Users were loaded successfully!", DateTime.Now);
+
             server = new TcpListener(ip, port);
             try
             {
@@ -121,4 +193,18 @@ namespace InstantMessengerServer
         public DateTime Date_status { get; set; }
         public Client Connection;
     }
+    public class Contact
+    {
+        public int Id { get; set; }
+        public int Id_user{ get; set; }
+        public int Id_contact{ get; set; }
+        public int Id_grupp{ get; set; }
+        public string Name_for_user{ get; set; }
+    }
+    public class Group
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+
 }

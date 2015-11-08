@@ -1,0 +1,16 @@
+﻿<Window x:Class="InstantMessenger.DeleteContact"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="DeleteContact" Height="142" Width="299">
+    <Grid Margin="0,0,2,187">
+        <ComboBox HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="270"/>
+        <Label Content="Delete contact" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="128"/>
+        <Button Content="Ok" HorizontalAlignment="Left" Height="23" Margin="10,72,0,-13" VerticalAlignment="Top" Width="45"/>
+        <Button Content="Cancel" HorizontalAlignment="Left" Height="23" Margin="80,72,0,-13" VerticalAlignment="Top" Width="75"/>
+        <ComboBox HorizontalAlignment="Left" Margin="10,41,0,-63" VerticalAlignment="Top" Width="270"/>
+        <Label Content="Delete contact" HorizontalAlignment="Left" Margin="10,10,0,-36" VerticalAlignment="Top" Width="128"/>
+        <Button Content="Ok" HorizontalAlignment="Left" Height="23" Margin="10,72,0,-95" VerticalAlignment="Top" Width="45"/>
+        <Button Content="Cancel" HorizontalAlignment="Left" Height="23" Margin="80,72,0,-95" VerticalAlignment="Top" Width="75"/>
+
+    </Grid>
+</Window>
