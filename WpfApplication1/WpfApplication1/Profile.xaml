@@ -7,8 +7,8 @@
         <Label Content="First Name" HorizontalAlignment="Left" Height="25" Margin="10,40,-2,-41" VerticalAlignment="Top" Width="70"/>
         <Label Content="Last Name" HorizontalAlignment="Left" Height="25" Margin="10,70,-2,-71" VerticalAlignment="Top" Width="70"/>
         <Label Content="Birthdate" HorizontalAlignment="Left" Height="25" Margin="10,100,-2,-101" VerticalAlignment="Top" Width="70"/>
-        <TextBlock HorizontalAlignment="Left" Height="20" Margin="95,45,-77,-41" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="60"/>
-        <TextBlock HorizontalAlignment="Left" Height="20" Margin="95,75,-77,-71" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="60"/>
-        <TextBlock HorizontalAlignment="Left" Height="20" Margin="95,105,-77,-101" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="60"/>
+        <TextBlock x:Name="lbl_Profile_FirstName" HorizontalAlignment="Left" Height="20" Margin="95,45,-77,-41" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="60"/>
+        <TextBlock x:Name="lbl_Profile_LastName" HorizontalAlignment="Left" Height="20" Margin="95,75,-77,-71" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="60"/>
+        <TextBlock x:Name="lbl_Profile_BirthDate" HorizontalAlignment="Left" Height="20" Margin="95,105,-82,-101" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="60"/>
     </Grid>
 </Window>

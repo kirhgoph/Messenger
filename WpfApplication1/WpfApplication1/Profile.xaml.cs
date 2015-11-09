@@ -23,5 +23,15 @@ namespace InstantMessenger
         {
             InitializeComponent();
         }
+        void Profile_ProfileReceived(object sender, WpfApplication1.ProfileReceivedEventArgs e)
+        {
+            this.BeginInvoke(new MethodInvoker(delegate
+            {
+                if (e.From == sendTo)
+                {
+                    talkText.Text += String.Format("[{0}] {1}\r\n", e.From, e.Message);
+                }
+            }));
+        }
     }
 }

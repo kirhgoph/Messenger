@@ -1,7 +1,9 @@
-﻿using System;
+﻿using InstantMessenger;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -39,6 +41,12 @@ namespace WpfApplication1
                 //logoutButton.Enabled = true;
                 //talkButton.Enabled = true;
             MessageBox.Show("Logged!");
+
+            Dispatcher.BeginInvoke(new ThreadStart(delegate 
+                {
+                    cBox_Privacy.SelectedIndex = 0;
+                    cBox_Status.SelectedIndex = 0;
+                }));
         }
         void im_RegisterOK(object sender, EventArgs e)
         {
@@ -56,9 +64,21 @@ namespace WpfApplication1
             MessageBox.Show("Registering!");
         }
 
-        private void LogIn_Click_1(object sender, RoutedEventArgs e)
+        private void LogIn_Click(object sender, RoutedEventArgs e)
         {
-
+            im.Login(txt_Login.Text, txt_Password.Text);
+            MessageBox.Show("Logging!");
         }
+
+        private void Profile_Click(object sender, RoutedEventArgs e)
+        {
+            Profile prof = new Profile();
+            Profile_data pd = im.GetProfile();
+            prof.lbl_Profile_FirstName.Text = pd.FirstName;
+            prof.lbl_Profile_LastName.Text = pd.LastName;
+            prof.lbl_Profile_BirthDate.Text = pd.BirthDate;
+            prof.Show();
+        }
+
     }
 }

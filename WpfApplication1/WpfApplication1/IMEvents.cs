@@ -42,8 +42,22 @@ namespace WpfApplication1
             get { return msg; }
         }
     }
+    public class ProfileReceivedEventArgs : EventArgs
+    {
+        string FirstName { get; set; }
+        string LastName { get; set; }
+        string BirthDate { get; set; }
+
+            public ProfileReceivedEventArgs(string FirstName, string LastName,string BirthDate)
+        {
+            this.FirstName = FirstName;
+            this.LastName = LastName;
+            this.BirthDate= BirthDate;
+        }
+    }
     
     public delegate void IMErrorEventHandler(object sender, IMErrorEventArgs e);
 
     public delegate void IMReceivedEventHandler(object sender, IMReceivedEventArgs e);
+    public delegate void ProfileReceivedEventHandler(object sender, ProfileReceivedEventArgs e);
 }

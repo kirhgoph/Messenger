@@ -12,6 +12,12 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace WpfApplication1
 {
+    public class Profile_data
+    {
+        public String FirstName { get; set; }
+        public String LastName { get; set; }
+        public String BirthDate { get; set; }
+    }
     public class IMClient
     {
         Thread tcpThread;      // Receiver
@@ -41,6 +47,10 @@ namespace WpfApplication1
                 tcpThread.Start();
             }
         }
+        public void Login(string user, string password)
+        {
+            connect(user, password, false);
+        }
         public void Register(string user, string password)
         {
             connect(user, password, true);
@@ -50,6 +60,10 @@ namespace WpfApplication1
             if (_conn)
                 CloseConn();
         }
+        public void GetProfile()
+        {
+             bw.Write(IM_GetProfile);
+        }
 
         public event EventHandler LoginOK;
         public event EventHandler RegisterOK;
@@ -57,6 +71,7 @@ namespace WpfApplication1
         public event IMErrorEventHandler LoginFailed;
         public event IMErrorEventHandler RegisterFailed;
         public event IMReceivedEventHandler MessageReceived;
+        public event ProfileReceivedEventHandler ProfileReceived;
 
         virtual protected void OnRegisterOK()
         {
@@ -83,6 +98,11 @@ namespace WpfApplication1
             if (MessageReceived != null)
                 MessageReceived(this, e);
         }
+        virtual protected void OnProfileReceived(ProfileReceivedEventArgs e)
+        {
+            if (ProfileReceived != null)
+                ProfileReceived(this, e);
+        }
         virtual protected void OnLoginFailed(IMErrorEventArgs e)
         {
             if (LoginFailed != null)
@@ -97,6 +117,7 @@ namespace WpfApplication1
 
         void SetupConn()  // Setup connection and login
         {
+            try { 
             client = new TcpClient(Server, Port);  // Connect to the server.
             netStream = client.GetStream();
             ssl = new SslStream(netStream, false, new RemoteCertificateValidationCallback(ValidateCert));
@@ -137,6 +158,9 @@ namespace WpfApplication1
             }
             if (_conn)
                 CloseConn();
+            }
+            catch { CloseConn(); }
+
         }
         void CloseConn() // Close connection.
         {
@@ -170,6 +194,13 @@ namespace WpfApplication1
                         string msg = br.ReadString();
                         OnMessageReceived(new IMReceivedEventArgs(from, msg));
                     }
+                    if (type == IM_SetProfile)
+                    {
+                        String FirstName = br.ReadString();
+                        String LastName = br.ReadString();
+                        String BirthDate = br.ReadString();
+                        OnProfileReceived(new ProfileReceivedEventArgs(FirstName, LastName, BirthDate));
+                    }
                 }
             }
             catch (IOException) { }
@@ -190,6 +221,8 @@ namespace WpfApplication1
         public const byte IM_IsAvailable = 8;  // Is user available?
         public const byte IM_Send = 9;         // Send message
         public const byte IM_Received = 10;    // Message received
+        public const byte IM_GetProfile = 11;  // Get profile details
+        public const byte IM_SetProfile = 12;  // Set profile details
 
         public static bool ValidateCert(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {

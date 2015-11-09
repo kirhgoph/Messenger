@@ -127,7 +127,7 @@ namespace InstantMessengerServer
         void Receiver()  // Receive all incoming packets.
         {
             Console.WriteLine("[{0}] ({1}) User logged in", DateTime.Now, Logging.Login);
-            Logging.Status = 1;
+            Logging.Status = 11;
 
             try
             {
@@ -174,6 +174,12 @@ namespace InstantMessengerServer
                             }
                         }
                     }
+                    else if (type == IM_GetProfile)
+                    {
+                        bw.Write(Logging.First_Name);
+                        bw.Write(Logging.Last_name);
+                        bw.Write(Logging.Birth_date.ToString());
+                    }
                 }
             }
             catch (IOException) { }
@@ -194,5 +200,7 @@ namespace InstantMessengerServer
         public const byte IM_IsAvailable = 8;  // Is user available?
         public const byte IM_Send = 9;         // Send message
         public const byte IM_Received = 10;    // Message received
+        public const byte IM_GetProfile = 11;  // Get profile details
+        public const byte IM_SetProfile = 12;  // Set profile details
     }
 }
