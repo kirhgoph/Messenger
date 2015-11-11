@@ -10,7 +10,7 @@ using System.Security.Cryptography;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 
-namespace WpfApplication1
+namespace InstantMessenger
 {
     public class Profile_data
     {
@@ -66,6 +66,7 @@ namespace WpfApplication1
         }
 
         public event EventHandler LoginOK;
+        public event EventHandler ConnectionFailed;
         public event EventHandler RegisterOK;
         public event EventHandler Disconnected;
         public event IMErrorEventHandler LoginFailed;
@@ -77,6 +78,11 @@ namespace WpfApplication1
         {
             if (RegisterOK != null)
                 RegisterOK(this, EventArgs.Empty);
+        }
+        virtual protected void OnConnectionFailed()
+        {
+            if (ConnectionFailed != null)
+                ConnectionFailed(this, EventArgs.Empty);
         }
         virtual protected void OnLoginOK()
         {
@@ -117,8 +123,17 @@ namespace WpfApplication1
 
         void SetupConn()  // Setup connection and login
         {
-            try { 
-            client = new TcpClient(Server, Port);  // Connect to the server.
+            try 
+            {
+                client = new TcpClient(Server, Port);  // Connect to the server.
+            }
+            catch
+            {
+                OnConnectionFailed();
+                CloseConn();
+                return;
+            }
+            try{
             netStream = client.GetStream();
             ssl = new SslStream(netStream, false, new RemoteCertificateValidationCallback(ValidateCert));
             ssl.AuthenticateAsClient("InstantMessengerServer");
@@ -160,17 +175,40 @@ namespace WpfApplication1
                 CloseConn();
             }
             catch { CloseConn(); }
-
         }
+
         void CloseConn() // Close connection.
         {
-            br.Close();
-            bw.Close();
+            try
+            {
+                br.Close();
+            }
+            catch { }
+            try
+            {
             ssl.Close();
-            netStream.Close();
+            }
+            catch { }
+            try
+            {
+                netStream.Close();
+            }
+            catch { }
+            try
+            {
             client.Close();
+            }
+            catch { }
+            try
+            {
             OnDisconnected();
+            }
+            catch { }
+            try
+            {
             _conn = false;
+                            }
+            catch { }
         }
         void Receiver()  // Receive all incoming packets.
         {

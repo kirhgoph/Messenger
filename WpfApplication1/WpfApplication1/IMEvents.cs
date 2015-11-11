@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfApplication1
+namespace InstantMessenger
 {
     public enum IMError : byte
     {
@@ -44,9 +44,9 @@ namespace WpfApplication1
     }
     public class ProfileReceivedEventArgs : EventArgs
     {
-        string FirstName { get; set; }
-        string LastName { get; set; }
-        string BirthDate { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string BirthDate { get; set; }
 
             public ProfileReceivedEventArgs(string FirstName, string LastName,string BirthDate)
         {

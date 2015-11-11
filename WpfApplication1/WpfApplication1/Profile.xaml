@@ -1,14 +1,14 @@
 ﻿<Window x:Class="InstantMessenger.Profile"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Profile" Height="187" Width="194">
+        Title="Profile" Height="189" Width="194">
     <Grid Margin="0,0,113,132">
         <Label Content="Profile" HorizontalAlignment="Left" Height="25" Margin="10,10,0,-11" VerticalAlignment="Top" Width="45"/>
         <Label Content="First Name" HorizontalAlignment="Left" Height="25" Margin="10,40,-2,-41" VerticalAlignment="Top" Width="70"/>
         <Label Content="Last Name" HorizontalAlignment="Left" Height="25" Margin="10,70,-2,-71" VerticalAlignment="Top" Width="70"/>
         <Label Content="Birthdate" HorizontalAlignment="Left" Height="25" Margin="10,100,-2,-101" VerticalAlignment="Top" Width="70"/>
-        <TextBlock x:Name="lbl_Profile_FirstName" HorizontalAlignment="Left" Height="20" Margin="95,45,-77,-41" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="60"/>
-        <TextBlock x:Name="lbl_Profile_LastName" HorizontalAlignment="Left" Height="20" Margin="95,75,-77,-71" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="60"/>
-        <TextBlock x:Name="lbl_Profile_BirthDate" HorizontalAlignment="Left" Height="20" Margin="95,105,-82,-101" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="60"/>
+        <DatePicker x:Name="dpckr_Profile_BirthDate" HorizontalAlignment="Left" Height="24" Margin="85,101,-112,-101" VerticalAlignment="Top" Width="100"/>
+        <TextBox x:Name="tbx_Profile_FirstName" HorizontalAlignment="Left" Height="23" Margin="85,45,-85,-42" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="73"/>
+        <TextBox x:Name="tbx_Profile_LastName" HorizontalAlignment="Left" Height="23" Margin="85,74,-85,-71" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="73"/>
     </Grid>
 </Window>

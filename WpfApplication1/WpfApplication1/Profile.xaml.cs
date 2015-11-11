@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,14 +24,13 @@ namespace InstantMessenger
         {
             InitializeComponent();
         }
-        void Profile_ProfileReceived(object sender, WpfApplication1.ProfileReceivedEventArgs e)
+        void Profile_ProfileReceived(object sender, InstantMessenger.ProfileReceivedEventArgs e)
         {
-            this.BeginInvoke(new MethodInvoker(delegate
+            Dispatcher.BeginInvoke(new ThreadStart(delegate
             {
-                if (e.From == sendTo)
-                {
-                    talkText.Text += String.Format("[{0}] {1}\r\n", e.From, e.Message);
-                }
+                dpckr_Profile_BirthDate.Text = e.BirthDate;
+                tbx_Profile_FirstName.Text = e.FirstName;
+                tbx_Profile_LastName.Text = e.LastName;
             }));
         }
     }
