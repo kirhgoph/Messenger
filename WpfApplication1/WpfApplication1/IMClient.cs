@@ -12,12 +12,6 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace InstantMessenger
 {
-    public class Profile_data
-    {
-        public String FirstName { get; set; }
-        public String LastName { get; set; }
-        public String BirthDate { get; set; }
-    }
     public class IMClient
     {
         Thread tcpThread;      // Receiver

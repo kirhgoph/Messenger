@@ -57,7 +57,6 @@ namespace InstantMessengerServer
                     //string e_mail = br.ReadString();
                     string e_mail = Login;
                     string password = br.ReadString();
-                    prog.LoadUsers();
                     Logging = prog.FindLogin(Login);
                     if (Login.Length < 50) // Isn't username too long?
                     {
@@ -176,6 +175,7 @@ namespace InstantMessengerServer
                     }
                     else if (type == IM_GetProfile)
                     {
+                        bw.Write(IM_SetProfile);
                         bw.Write(Logging.First_Name);
                         bw.Write(Logging.Last_name);
                         bw.Write(Logging.Birth_date.ToString());

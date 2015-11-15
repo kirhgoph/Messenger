@@ -24,14 +24,5 @@ namespace InstantMessenger
         {
             InitializeComponent();
         }
-        void Profile_ProfileReceived(object sender, InstantMessenger.ProfileReceivedEventArgs e)
-        {
-            Dispatcher.BeginInvoke(new ThreadStart(delegate
-            {
-                dpckr_Profile_BirthDate.Text = e.BirthDate;
-                tbx_Profile_FirstName.Text = e.FirstName;
-                tbx_Profile_LastName.Text = e.LastName;
-            }));
-        }
     }
 }

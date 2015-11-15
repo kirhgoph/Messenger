@@ -151,7 +151,15 @@ namespace InstantMessengerServer
                 Console.WriteLine("[{0}] Error connecting to SQL server!", DateTime.Now);
                 state = State_SQLErr;
             }
-
+            try
+            {
+                LoadUsers();
+            }
+            catch
+            {
+                Console.WriteLine("[{0}] Error loading users!", DateTime.Now);
+                state = State_SQLErr;
+            }
             server = new TcpListener(ip, port);
             try
             {

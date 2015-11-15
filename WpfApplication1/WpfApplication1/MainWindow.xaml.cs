@@ -30,8 +30,9 @@ namespace InstantMessenger
             im.RegisterOK += new EventHandler(im_RegisterOK);
             im.ConnectionFailed += new EventHandler(im_ConnectionFailed);
             im.LoginFailed += new IMErrorEventHandler(im_LoginFailed);
-            //im.RegisterFailed += new IMErrorEventHandler(im_RegisterFailed);
-            //im.Disconnected += new EventHandler(im_Disconnected);
+            im.RegisterFailed += new IMErrorEventHandler(im_RegisterFailed);
+            im.Disconnected += new EventHandler(im_Disconnected);
+            im.ProfileReceived += new ProfileReceivedEventHandler(im_ProfileReceived);
         }
         void im_LoginOK(object sender, EventArgs e)
         {
@@ -44,7 +45,10 @@ namespace InstantMessenger
 
             Dispatcher.BeginInvoke(new ThreadStart(delegate 
                 {
+                    btn_LogIn.IsEnabled = false;
                     btn_LogIn.Visibility = System.Windows.Visibility.Hidden;
+                    btn_Registration.IsEnabled = false;
+                    btn_LogOut.IsEnabled = true;
                     btn_LogOut.Visibility = System.Windows.Visibility.Visible;
                     btn_ContactAdd.IsEnabled = true;
                     btn_ContactDelete.IsEnabled = true;
@@ -74,7 +78,11 @@ namespace InstantMessenger
             //loginButton.Enabled = false;
             //logoutButton.Enabled = true;
             //talkButton.Enabled = true;
-            MessageBox.Show("Log In failed!");
+            MessageBox.Show("Login failed!");
+        }
+        void im_RegisterFailed(object sender, IMErrorEventArgs e)
+        {
+                MessageBox.Show("Register failed!");
         }
         void im_RegisterOK(object sender, EventArgs e)
         {
@@ -84,6 +92,39 @@ namespace InstantMessenger
                 //logoutButton.Enabled = true;
                 //talkButton.Enabled = true;
             MessageBox.Show("Registered!");
+        }
+        void im_Disconnected(object sender, EventArgs e)
+        {
+                MessageBox.Show ("Disconnected!");
+                Dispatcher.BeginInvoke(new ThreadStart(delegate
+                {
+                    btn_Registration.IsEnabled = true;
+                    btn_LogIn.IsEnabled = true;
+                    btn_LogIn.Visibility = System.Windows.Visibility.Visible;
+                    btn_LogOut.IsEnabled = false;
+                    btn_LogOut.Visibility = System.Windows.Visibility.Hidden;
+                    btn_ContactAdd.IsEnabled = false;
+                    btn_ContactDelete.IsEnabled = false;
+                    btn_Profile.IsEnabled = false;
+                    btn_Seeing.IsEnabled = false;
+                    btn_Unseeing.IsEnabled = false;
+                    btn_Ignored.IsEnabled = false;
+                    cBox_Status.IsEnabled = false;
+                    cBox_Privacy.IsEnabled = false;
+                    cBox_Privacy.SelectedIndex = -1;
+                    cBox_Status.SelectedIndex = -1;
+                }));
+        }
+        void im_ProfileReceived(object sender, ProfileReceivedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new ThreadStart(delegate
+            {
+                Profile prof = new Profile();
+                prof.dpckr_Profile_BirthDate.Text = e.BirthDate;
+                prof.tbx_Profile_FirstName.Text = e.FirstName;
+                prof.tbx_Profile_LastName.Text = e.LastName;
+                prof.Show();
+            }));
         }
 
         private void Registration_Click(object sender, RoutedEventArgs e)
