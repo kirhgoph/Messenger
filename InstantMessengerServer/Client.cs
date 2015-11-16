@@ -67,6 +67,7 @@ namespace InstantMessengerServer
                                 if (Logging==null)  // User already exists?
                                 {
                                     Logging = new User() { Id = prog.Users.Count, Pass_hash = password, Login = Login, e_mail = e_mail, Status = 11 };
+                                    Logging.Birth_date = new DateTime(1900, 1, 1);
                                     prog.SaveUsers(Logging);
                                     prog.Users.Add(Logging);
                                     bw.Write(IM_OK);

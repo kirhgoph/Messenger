@@ -37,5 +37,10 @@ namespace InstantMessenger
             this.Close();
         }
 
+        private void tbx_Profile_FirstName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
     }
 }
