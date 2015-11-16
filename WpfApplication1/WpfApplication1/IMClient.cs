@@ -58,6 +58,14 @@ namespace InstantMessenger
         {
              bw.Write(IM_GetProfile);
         }
+        public void SaveProfile(ProfileReceivedEventArgs e)
+        {
+            bw.Write(IM_SaveProfile);
+            bw.Write(e.FirstName);
+            bw.Write(e.LastName);
+            bw.Write(e.BirthDate);
+        }
+
 
         public event EventHandler LoginOK;
         public event EventHandler ConnectionFailed;
@@ -93,6 +101,11 @@ namespace InstantMessenger
             if (Disconnected != null)
                 Disconnected(this, EventArgs.Empty);
         }
+        virtual protected void OnLoginFailed(IMErrorEventArgs e)
+        {
+            if (LoginFailed != null)
+                LoginFailed(this, e);
+        }
         virtual protected void OnMessageReceived(IMReceivedEventArgs e)
         {
             if (MessageReceived != null)
@@ -103,11 +116,7 @@ namespace InstantMessenger
             if (ProfileReceived != null)
                 ProfileReceived(this, e);
         }
-        virtual protected void OnLoginFailed(IMErrorEventArgs e)
-        {
-            if (LoginFailed != null)
-                LoginFailed(this, e);
-        }
+        
 
         TcpClient client;
         NetworkStream netStream;
@@ -255,6 +264,8 @@ namespace InstantMessenger
         public const byte IM_Received = 10;    // Message received
         public const byte IM_GetProfile = 11;  // Get profile details
         public const byte IM_SetProfile = 12;  // Set profile details
+        public const byte IM_SaveProfile = 13;  // Save profile details
+        
 
         public static bool ValidateCert(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {

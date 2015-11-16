@@ -123,8 +123,13 @@ namespace InstantMessenger
                 prof.dpckr_Profile_BirthDate.Text = e.BirthDate;
                 prof.tbx_Profile_FirstName.Text = e.FirstName;
                 prof.tbx_Profile_LastName.Text = e.LastName;
+                prof.ProfileSave += new ProfileReceivedEventHandler(im_ProfileSave);
                 prof.Show();
             }));
+        }
+        void im_ProfileSave(object sender, ProfileReceivedEventArgs e)
+        {
+            im.SaveProfile(e);
         }
 
         private void Registration_Click(object sender, RoutedEventArgs e)

@@ -141,10 +141,10 @@ namespace InstantMessengerServer
                         bw.Write(IM_IsAvailable);
                         bw.Write(who);
 
-                        User info=prog.Users.Find(p => p.Login == who);
-                        if (info!=null)
+                        User info = prog.Users.Find(p => p.Login == who);
+                        if (info != null)
                         {
-                            if (info.Status==1)
+                            if (info.Status == 1)
                                 bw.Write(true);   // Available
                             else
                                 bw.Write(false);  // Unavailable
@@ -159,10 +159,10 @@ namespace InstantMessengerServer
                         string msg = br.ReadString();
 
                         User recipient = prog.Users.Find(p => p.Login == to); ;
-                        if (recipient!=null)
+                        if (recipient != null)
                         {
                             // Is recipient logged in?
-                            if (recipient.Status!=0)
+                            if (recipient.Status != 0)
                             {
                                 // Write received packet to recipient
                                 recipient.Connection.bw.Write(IM_Received);
@@ -179,6 +179,13 @@ namespace InstantMessengerServer
                         bw.Write(Logging.First_Name);
                         bw.Write(Logging.Last_name);
                         bw.Write(Logging.Birth_date.ToString());
+                    }
+                    else if (type == IM_SaveProfile)
+                    {
+                        Logging.First_Name = br.ReadString();
+                        Logging.Last_name = br.ReadString();
+                        Logging.Birth_date = Convert.ToDateTime(br.ReadString());
+                        prog.EditUsers(Logging);
                     }
                 }
             }
@@ -202,5 +209,6 @@ namespace InstantMessengerServer
         public const byte IM_Received = 10;    // Message received
         public const byte IM_GetProfile = 11;  // Get profile details
         public const byte IM_SetProfile = 12;  // Set profile details
+        public const byte IM_SaveProfile = 13;  // Save profile details
     }
 }

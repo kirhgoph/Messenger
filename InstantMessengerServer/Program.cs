@@ -46,6 +46,7 @@ namespace InstantMessengerServer
             { 
             while (myReader.Read())
                 Users.Add(new User() { Id = SafeGetInt(myReader, 0), First_Name = SafeGetString(myReader, 1), Last_name = SafeGetString(myReader, 2), Birth_date = SafeGetDate(myReader, 3), Pass_hash = SafeGetString(myReader, 4), Login = SafeGetString(myReader, 5), e_mail = SafeGetString(myReader, 6), Status = SafeGetInt(myReader, 7), Date_status = SafeGetDate(myReader, 8) });
+
             }
             catch (Exception e)
             {
@@ -57,6 +58,24 @@ namespace InstantMessengerServer
         {
             string com = "INSERT into [Messenger].[dbo].[User] (Id, Pass_hash,Login,[e-mail],Status) values(" + user.Id + "," + user.Pass_hash + "," + user.Login + "," + user.e_mail + ","+user.Status+");";
             SqlCommand myCommand = new SqlCommand("INSERT into [Messenger].[dbo].[User] (Id, Pass_hash,Login,[e-mail],Status) values(" + user.Id + "," + user.Pass_hash + "," + user.Login + "," + user.e_mail + "," + user.Status + ");", SQLConnection);
+            try
+            {
+                myCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            //SqlCommand myCommand = new SqlCommand("DELETE from table [Messenger].[dbo].[User];");
+            //myCommand.ExecuteNonQuery();
+            //myCommand.CommandText = "INSERT INTO table dbo.User (Login, [e-mail], Pass_hash) values ('" + userName + "','" + userName + "','" + password + "')";
+            //myCommand.ExecuteNonQuery();
+        }
+        public void EditUsers(User user)
+        {
+            string Birthdate_str = user.Birth_date.ToString("yyyy-MM-dd HH:mm:ss");
+            string com = "UPDATE [Messenger].[dbo].[User] SET [First_Name] = " + user.First_Name + ",[Last_name] = " + user.Last_name + ",[Birth_date] = convert(datetime,'" + Birthdate_str + "',5) WHERE [Login]=" + user.Login;
+            SqlCommand myCommand = new SqlCommand("UPDATE [Messenger].[dbo].[User] SET [First_Name] = " + user.First_Name + ",[Last_name] = " + user.Last_name + ",[Birth_date] = " + Birthdate_str + " WHERE [Login]==" + user.Login + ");", SQLConnection);
             try
             {
                 myCommand.ExecuteNonQuery();

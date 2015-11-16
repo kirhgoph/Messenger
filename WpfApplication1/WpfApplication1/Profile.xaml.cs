@@ -20,9 +20,22 @@ namespace InstantMessenger
     /// </summary>
     public partial class Profile : Window
     {
+        public event ProfileReceivedEventHandler ProfileSave;
+        virtual protected void OnProfileSave(ProfileReceivedEventArgs e)
+        {
+            if (ProfileSave != null)
+                ProfileSave(this, e);
+        }
         public Profile()
         {
             InitializeComponent();
         }
+
+        private void btn_SaveProfile_Click(object sender, RoutedEventArgs e)
+        {
+            OnProfileSave(new ProfileReceivedEventArgs(tbx_Profile_FirstName.Text,tbx_Profile_LastName.Text,dpckr_Profile_BirthDate.ToString()));
+            this.Close();
+        }
+
     }
 }
