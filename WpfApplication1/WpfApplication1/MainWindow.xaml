@@ -31,7 +31,7 @@
         <Label x:Name="lbl_Password" Content="Password:" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="52" FontFamily="Times New Roman" FontSize="10" Margin="127,0,0,0"/>
         <TextBox x:Name="txt_Password" HorizontalAlignment="Right" Height="20" Margin="0,0,253,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85"  FontFamily="Times New Roman" FontSize="10"/>
         <Button x:Name="btn_LogIn" Content="Log In" HorizontalAlignment="Left" Height="20" Margin="266,0,0,0" VerticalAlignment="Top" Width="59" FontFamily="Times New Roman" FontSize="10" Click="LogIn_Click" Visibility="Visible"/>
-        <Button x:Name="btn_LogOut" Content="Log Out" HorizontalAlignment="Left" Height="20" Margin="266,0,0,0" VerticalAlignment="Top" Width="59" FontFamily="Times New Roman" FontSize="10" IsEnabled="False" Visibility="Hidden"/>
+        <Button x:Name="btn_LogOut" Content="Log Out" HorizontalAlignment="Left" Height="20" Margin="266,0,0,0" VerticalAlignment="Top" Width="59" FontFamily="Times New Roman" FontSize="10" IsEnabled="False" Visibility="Hidden" Click="btn_LogOut_Click"/>
         <Border BorderBrush="Black" BorderThickness="1" Height="2" Margin="184,18,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="334" Grid.Row="1"/>
         <TextBox HorizontalAlignment="Left" Height="84" Margin="185,20,0,0" TextWrapping="Wrap" Text="Type your message here:" VerticalAlignment="Top" Width="275"  FontFamily="Times New Roman" FontSize="10" Grid.Row="1"/>
         <Label Content="Contacts:" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="47" FontFamily="Times New Roman" FontSize="10" Margin="1,21,0,0"/>

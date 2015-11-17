@@ -95,6 +95,8 @@ namespace InstantMessenger
         }
         void im_Disconnected(object sender, EventArgs e)
         {
+            if (btn_Registration.IsEnabled==false)
+            { 
                 MessageBox.Show ("Disconnected!");
                 Dispatcher.BeginInvoke(new ThreadStart(delegate
                 {
@@ -114,6 +116,7 @@ namespace InstantMessenger
                     cBox_Privacy.SelectedIndex = -1;
                     cBox_Status.SelectedIndex = -1;
                 }));
+                }
         }
         void im_ProfileReceived(object sender, ProfileReceivedEventArgs e)
         {
@@ -150,6 +153,11 @@ namespace InstantMessenger
         private void Profile_Click(object sender, RoutedEventArgs e)
         {
             im.GetProfile();
+        }
+
+        private void btn_LogOut_Click(object sender, RoutedEventArgs e)
+        {
+            im.Disconnect();
         }
 
     }
