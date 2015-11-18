@@ -19,20 +19,28 @@ namespace InstantMessenger
     /// </summary>
     public partial class AddContact : Window
     {
-        public event ProfileReceivedEventHandler ProfileSave;
-        virtual protected void OnProfileSave(ProfileReceivedEventArgs e)
+        public event AddContactSearchEventHandler AddcontactSearch;
+        virtual protected void OnAddcontactSearch(AddContactSearchEventArgs e)
         {
-            if (ProfileSave != null)
-                ProfileSave(this, e);
+            if (AddcontactSearch != null)
+                AddcontactSearch(this, e);
         }
         public AddContact()
         {
             InitializeComponent();
+            AddcontactResult += new AddContactResultEventHandler(im_AddcontactResult);
         }
-
+        public event AddContactResultEventHandler AddcontactResult;
+        public virtual void OnAddcontactResult(AddContactResultEventArgs e)
+        {
+            if (AddcontactResult != null)
+                AddcontactResult(this, e);
+        }
         private void btn_AddContact_Search_Click(object sender, RoutedEventArgs e)
         {
-            
+            if (tbx_SearchString.Text != "")
+                OnAddcontactSearch(new AddContactSearchEventArgs(tbx_SearchString.Text));
+            else MessageBox.Show("Enter search query!");
         }
     }
 }

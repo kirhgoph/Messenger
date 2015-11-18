@@ -200,6 +200,18 @@ namespace InstantMessengerServer
                         Logging.Status = Logging.Status - Logging.Status % 10 + (br.ReadInt32()+1);
                         prog.EditUsers(Logging);
                     }
+                    else if (type == IM_AddcontactSearch)
+                    {
+                        bw.Write(IM_AddcontactResult);
+                        User result = prog.FindLogin(br.ReadString());
+                        if (result != null)
+                        {
+                            bw.Write(1);
+                            bw.Write(result.Login);
+                        }
+                        else bw.Write(0);
+
+                    }
                 }
             }
             catch (IOException) { }
@@ -225,5 +237,7 @@ namespace InstantMessengerServer
         public const byte IM_SaveProfile = 13;  // Save profile details
         public const byte IM_ChangeStatus = 14;// Change status
         public const byte IM_ChangePrivacy = 15; //Change privacy
+        public const byte IM_AddcontactSearch = 16; //Search request to add new contact
+        public const byte IM_AddcontactResult = 17; //Search result to add new contact
     }
 }

@@ -4,7 +4,7 @@
         Title="Window1" Height="322" Width="300">
     <Grid>
         <Label Content="Add contact" HorizontalAlignment="Left" Height="30" Margin="10,10,0,0" VerticalAlignment="Top" Width="80"/>
-        <TextBox HorizontalAlignment="Left" Height="20" Margin="95,15,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="65"/>
+        <TextBox x:Name="tbx_SearchString" HorizontalAlignment="Left" Height="20" Margin="95,15,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="65"/>
         <Button x:Name="btn_AddContact_Search" Content="Search" HorizontalAlignment="Left" Height="20" Margin="170,15,0,0" VerticalAlignment="Top" Width="80" Click="btn_AddContact_Search_Click"/>
         <ListBox HorizontalAlignment="Left" Margin="10,45,0,36" Width="272"/>
         <Button Content="Ok" HorizontalAlignment="Left" Height="21" Margin="160,260,0,0" VerticalAlignment="Top" Width="40"/>

@@ -75,6 +75,12 @@ namespace InstantMessenger
             bw.Write(e.LastName);
             bw.Write(e.BirthDate);
         }
+        public void Addcontact_Search(AddContactSearchEventArgs e)
+        {
+            bw.Write(IM_AddcontactSearch);
+            bw.Write(e.SearchString);
+        }
+   
 
 
         public event EventHandler LoginOK;
@@ -189,7 +195,6 @@ namespace InstantMessenger
             }
             catch { CloseConn(); }
         }
-
         void CloseConn() // Close connection.
         {
             try
@@ -252,6 +257,14 @@ namespace InstantMessenger
                         String BirthDate = br.ReadString();
                         OnProfileReceived(new ProfileReceivedEventArgs(FirstName, LastName, BirthDate));
                     }
+                    if (type == IM_AddcontactResult)
+                    {
+                        if (br.ReadInt32()!=0)
+                        {
+                            AddContact.OnAddcontactResult(new AddContactResultEventArgs(br.ReadString()));
+                        }
+                        OnAddcontactResult(new AddContactResultEventArgs(null));
+                    }
                 }
             }
             catch (IOException) { }
@@ -277,6 +290,8 @@ namespace InstantMessenger
         public const byte IM_SaveProfile = 13; // Save profile details
         public const byte IM_ChangeStatus = 14;// Change status
         public const byte IM_ChangePrivacy = 15; //Change privacy
+        public const byte IM_AddcontactSearch = 16; //Search request to add new contact
+        public const byte IM_AddcontactResult = 17; //Search result to add new contact
 
         public static bool ValidateCert(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {

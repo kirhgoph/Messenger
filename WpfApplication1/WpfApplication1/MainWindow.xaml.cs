@@ -25,6 +25,7 @@ namespace InstantMessenger
         public MainWindow()
         {
             InitializeComponent();
+            AddContact AddCont = new AddContact();
             // InstantMessenger Events
             im.LoginOK += new EventHandler(im_LoginOK);
             im.RegisterOK += new EventHandler(im_RegisterOK);
@@ -33,6 +34,10 @@ namespace InstantMessenger
             im.RegisterFailed += new IMErrorEventHandler(im_RegisterFailed);
             im.Disconnected += new EventHandler(im_Disconnected);
             im.ProfileReceived += new ProfileReceivedEventHandler(im_ProfileReceived);
+        }
+        void im_AddcontactSearch(object sender, AddContactSearchEventArgs e)
+        {
+            im.Addcontact_Search(e);
         }
         void im_LoginOK(object sender, EventArgs e)
         {
@@ -118,6 +123,19 @@ namespace InstantMessenger
                 }));
                 }
         }
+        void im_AddcontactResult(object sender, AddContactResultEventArgs e)
+        {
+            
+            Dispatcher.BeginInvoke(new ThreadStart(delegate
+            {
+                Profile prof = new Profile();
+                //prof.dpckr_Profile_BirthDate.Text = e.BirthDate;
+                //prof.tbx_Profile_FirstName.Text = e.FirstName;
+                //prof.tbx_Profile_LastName.Text = e.LastName;
+                //prof.ProfileSave += new ProfileReceivedEventHandler(im_ProfileSave);
+                prof.Show();
+            }));
+        }
         void im_ProfileReceived(object sender, ProfileReceivedEventArgs e)
         {
             Dispatcher.BeginInvoke(new ThreadStart(delegate
@@ -149,25 +167,29 @@ namespace InstantMessenger
             else
                 MessageBox.Show("Enter login and password!");
         }
-
         private void Profile_Click(object sender, RoutedEventArgs e)
         {
             im.GetProfile();
         }
-
         private void btn_LogOut_Click(object sender, RoutedEventArgs e)
         {
             im.Disconnect();
         }
-
         private void cBox_Status_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             im.ChangeStatus(cBox_Status.SelectedIndex);
         }
-
         private void cBox_Privacy_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             im.ChangePrivacy(cBox_Privacy.SelectedIndex);
+        }
+        private void btn_ContactAdd_Click(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new ThreadStart(delegate
+            {
+                AddCont.AddcontactSearch += new AddContactSearchEventHandler(im_AddcontactSearch);
+                AddCont.Show();
+            }));
         }
 
     }
