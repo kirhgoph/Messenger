@@ -58,6 +58,16 @@ namespace InstantMessenger
         {
              bw.Write(IM_GetProfile);
         }
+        public void ChangeStatus(int stat)
+        {
+            bw.Write(IM_ChangeStatus);
+            bw.Write(stat);
+        }
+        public void ChangePrivacy(int priv)
+        {
+            bw.Write(IM_ChangePrivacy);
+            bw.Write(priv);
+        }
         public void SaveProfile(ProfileReceivedEventArgs e)
         {
             bw.Write(IM_SaveProfile);
@@ -264,12 +274,12 @@ namespace InstantMessenger
         public const byte IM_Received = 10;    // Message received
         public const byte IM_GetProfile = 11;  // Get profile details
         public const byte IM_SetProfile = 12;  // Set profile details
-        public const byte IM_SaveProfile = 13;  // Save profile details
-        
+        public const byte IM_SaveProfile = 13; // Save profile details
+        public const byte IM_ChangeStatus = 14;// Change status
+        public const byte IM_ChangePrivacy = 15; //Change privacy
 
         public static bool ValidateCert(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
-            // Uncomment this lines to disallow untrusted certificates.
             //if (sslPolicyErrors == SslPolicyErrors.None)
             //    return true;
             //else

@@ -31,3 +31,6 @@ C:\Messenger\Messenger\Messenger\InstantMessenger\obj\x86\Debug\InstantMessenger
 C:\Messenger\Messenger\Messenger\InstantMessenger\obj\x86\Debug\InstantMessenger.Properties.Resources.resources
 C:\Messenger\Messenger\Messenger\InstantMessenger\obj\x86\Debug\InstantMessenger.TalkForm.resources
 C:\Messenger\Messenger\Messenger\InstantMessenger\obj\x86\Debug\InstantMessenger.csproj.GenerateResource.Cache
+C:\Messenger\InstantMessenger\bin\Debug\InstantMessenger.exe.config
+C:\Messenger\InstantMessenger\obj\x86\Debug\InstantMessenger.exe
+C:\Messenger\InstantMessenger\obj\x86\Debug\InstantMessenger.pdb

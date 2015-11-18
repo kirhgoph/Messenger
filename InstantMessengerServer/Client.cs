@@ -68,6 +68,8 @@ namespace InstantMessengerServer
                                 {
                                     Logging = new User() { Id = prog.Users.Count, Pass_hash = password, Login = Login, e_mail = e_mail, Status = 11 };
                                     Logging.Birth_date = new DateTime(1900, 1, 1);
+                                    Logging.First_Name = "";
+                                    Logging.Last_name = "";
                                     prog.SaveUsers(Logging);
                                     prog.Users.Add(Logging);
                                     bw.Write(IM_OK);
@@ -188,6 +190,16 @@ namespace InstantMessengerServer
                         Logging.Birth_date = Convert.ToDateTime(br.ReadString());
                         prog.EditUsers(Logging);
                     }
+                    else if (type == IM_ChangeStatus)
+                    {
+                        Logging.Status=Logging.Status%10+(br.ReadInt32()+1)*10;
+                        prog.EditUsers(Logging);
+                    }
+                    else if (type == IM_ChangePrivacy)
+                    {
+                        Logging.Status = Logging.Status - Logging.Status % 10 + (br.ReadInt32()+1);
+                        prog.EditUsers(Logging);
+                    }
                 }
             }
             catch (IOException) { }
@@ -211,5 +223,7 @@ namespace InstantMessengerServer
         public const byte IM_GetProfile = 11;  // Get profile details
         public const byte IM_SetProfile = 12;  // Set profile details
         public const byte IM_SaveProfile = 13;  // Save profile details
+        public const byte IM_ChangeStatus = 14;// Change status
+        public const byte IM_ChangePrivacy = 15; //Change privacy
     }
 }

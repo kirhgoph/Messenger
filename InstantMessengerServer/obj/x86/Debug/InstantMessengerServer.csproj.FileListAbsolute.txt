@@ -21,3 +21,10 @@ C:\Messenger\Messenger\Messenger\InstantMessengerServer\bin\Debug\server.pfx
 C:\Messenger\Messenger\Messenger\InstantMessengerServer\bin\Debug\tools\generate_cert.bat
 C:\Messenger\Messenger\Messenger\InstantMessengerServer\bin\Debug\InstantMessengerServer.exe
 C:\Messenger\Messenger\Messenger\InstantMessengerServer\bin\Debug\InstantMessengerServer.pdb
+C:\Messenger\InstantMessengerServer\obj\x86\Debug\InstantMessengerServer.exe
+C:\Messenger\InstantMessengerServer\obj\x86\Debug\InstantMessengerServer.pdb
+C:\Messenger\InstantMessengerServer\bin\Debug\server.pfx
+C:\Messenger\InstantMessengerServer\bin\Debug\tools\generate_cert.bat
+C:\Messenger\InstantMessengerServer\bin\Debug\InstantMessengerServer.exe
+C:\Messenger\InstantMessengerServer\bin\Debug\InstantMessengerServer.pdb
+C:\Messenger\InstantMessengerServer\obj\x86\Debug\InstantMessengerServer.csprojResolveAssemblyReference.cache

@@ -77,8 +77,8 @@ namespace InstantMessengerServer
         public void EditUsers(User user)
         {
             string Birthdate_str = user.Birth_date.ToString("yyyy-MM-dd HH:mm:ss");
-            string com = "UPDATE [Messenger].[dbo].[User] SET [First_Name] = '" + user.First_Name + "',[Last_name] = '" + user.Last_name + "',[Birth_date] = convert(datetime,'" + Birthdate_str + "',20) WHERE [Login]=" + user.Login;
-            SqlCommand myCommand = new SqlCommand("UPDATE [Messenger].[dbo].[User] SET [First_Name] = '" + user.First_Name + "',[Last_name] = '" + user.Last_name + "',[Birth_date] = convert(datetime,'" + Birthdate_str + "',20) WHERE [Login]=" + user.Login, SQLConnection);
+            string com = "UPDATE [Messenger].[dbo].[User] SET [Status]=" + user.Status +",[First_Name] = '" + user.First_Name + "',[Last_name] = '" + user.Last_name + "',[Birth_date] = convert(datetime,'" + Birthdate_str + "',20) WHERE [Login]=" + user.Login;
+            SqlCommand myCommand = new SqlCommand("UPDATE [Messenger].[dbo].[User] SET [Status]=" + user.Status + ",[First_Name] = '" + user.First_Name + "',[Last_name] = '" + user.Last_name + "',[Birth_date] = convert(datetime,'" + Birthdate_str + "',20) WHERE [Login]=" + user.Login, SQLConnection);
             try
             {
                 myCommand.ExecuteNonQuery();

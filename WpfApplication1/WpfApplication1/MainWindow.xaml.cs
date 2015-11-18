@@ -160,5 +160,15 @@ namespace InstantMessenger
             im.Disconnect();
         }
 
+        private void cBox_Status_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            im.ChangeStatus(cBox_Status.SelectedIndex);
+        }
+
+        private void cBox_Privacy_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            im.ChangePrivacy(cBox_Privacy.SelectedIndex);
+        }
+
     }
 }

@@ -17,11 +17,22 @@ namespace InstantMessenger
     /// <summary>
     /// Логика взаимодействия для Window1.xaml
     /// </summary>
-    public partial class Window1 : Window
+    public partial class AddContact : Window
     {
-        public Window1()
+        public event ProfileReceivedEventHandler ProfileSave;
+        virtual protected void OnProfileSave(ProfileReceivedEventArgs e)
+        {
+            if (ProfileSave != null)
+                ProfileSave(this, e);
+        }
+        public AddContact()
         {
             InitializeComponent();
+        }
+
+        private void btn_AddContact_Search_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }
