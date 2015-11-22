@@ -42,6 +42,16 @@ namespace InstantMessenger
             get { return msg; }
         }
     }
+    public class AddContactAddEventArgs : EventArgs
+    {
+        public string Login { get; set; }
+
+        public AddContactAddEventArgs(string Login)
+        {
+            this.Login = Login;
+        }
+    }
+
     public class AddContactSearchEventArgs : EventArgs
     {
         public string SearchString { get; set; }
@@ -78,6 +88,7 @@ namespace InstantMessenger
 
     public delegate void IMReceivedEventHandler(object sender, IMReceivedEventArgs e);
     public delegate void ProfileReceivedEventHandler(object sender, ProfileReceivedEventArgs e);
+    public delegate void AddContactAddEventHandler(object sender, AddContactAddEventArgs e);
     public delegate void AddContactSearchEventHandler(object sender, AddContactSearchEventArgs e);
     public delegate void AddContactResultEventHandler(object sender, AddContactResultEventArgs e);
 }

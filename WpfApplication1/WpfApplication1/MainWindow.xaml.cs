@@ -21,11 +21,10 @@ namespace InstantMessenger
     /// </summary>
     public partial class MainWindow : Window
     {
-        IMClient im = new IMClient();
+        public IMClient im = new IMClient();
         public MainWindow()
         {
             InitializeComponent();
-            AddContact AddCont = new AddContact();
             // InstantMessenger Events
             im.LoginOK += new EventHandler(im_LoginOK);
             im.RegisterOK += new EventHandler(im_RegisterOK);
@@ -34,6 +33,10 @@ namespace InstantMessenger
             im.RegisterFailed += new IMErrorEventHandler(im_RegisterFailed);
             im.Disconnected += new EventHandler(im_Disconnected);
             im.ProfileReceived += new ProfileReceivedEventHandler(im_ProfileReceived);
+        }
+        void im_AddcontactAdd(object sender, AddContactAddEventArgs e)
+        {
+            im.Addcontact_Add(e);
         }
         void im_AddcontactSearch(object sender, AddContactSearchEventArgs e)
         {
@@ -187,7 +190,11 @@ namespace InstantMessenger
         {
             Dispatcher.BeginInvoke(new ThreadStart(delegate
             {
+                AddContact AddCont = new AddContact();
+                AddCont.ParentWindow = this;
+                AddCont.registerHandler();
                 AddCont.AddcontactSearch += new AddContactSearchEventHandler(im_AddcontactSearch);
+                AddCont.AddcontactAdd += new AddContactAddEventHandler(im_AddcontactAdd);
                 AddCont.Show();
             }));
         }

@@ -97,16 +97,32 @@ namespace InstantMessengerServer
             SqlCommand myCommand = new SqlCommand("SELECT *  FROM [Messenger].[dbo].[Contacts];", SQLConnection);
             SqlDataReader myReader = null;
             myReader = myCommand.ExecuteReader();
-            while (myReader.Read())
-            Contacts.Add(new Contact() { Id = myReader.GetInt32(0), Id_user= myReader.GetInt32(1), Id_contact = myReader.GetInt32(2), Id_grupp = myReader.GetInt32(3), Name_for_user = myReader.GetString(4)});
+            try
+            {
+                while (myReader.Read())
+                {
+                    Contact cont = new Contact() { Id = SafeGetInt(myReader, 0), Id_user = SafeGetInt(myReader, 1), Id_contact = SafeGetInt(myReader, 2), Id_grupp = SafeGetInt(myReader, 3), Name_for_user = SafeGetString(myReader, 4) };
+                    Contacts.Add(cont);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
             myReader.Close();
         }
-        void SaveContacts()
+        public void SaveContacts(Contact cont)
         {
-            //SqlCommand myCommand = new SqlCommand("DELETE from table [Messenger].[dbo].[User];");
-            //myCommand.ExecuteNonQuery();
-            //myCommand.CommandText = "INSERT INTO table dbo.User (Login, [e-mail], Pass_hash) values ('" + userName + "','" + userName + "','" + password + "')";
-            //myCommand.ExecuteNonQuery();
+            String com = "INSERT into [Messenger].[dbo].[Contacts] (Id,Id_user,Id_contact,ID_grupp,Name_for_user) values(" + cont.Id + "," + cont.Id_user + "," + cont.Id_contact + "," + cont.Id_grupp + "," + cont.Name_for_user + ");";
+            SqlCommand myCommand = new SqlCommand("INSERT into [Messenger].[dbo].[Contacts] (Id,Id_user,Id_contact,ID_grupp,Name_for_user) values(" + cont.Id + "," + cont.Id_user + "," + cont.Id_contact + "," + cont.Id_grupp + "," + cont.Name_for_user + ");",SQLConnection);
+            try
+            {
+            myCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
         public void LoadGroups()
         {
@@ -176,10 +192,11 @@ namespace InstantMessengerServer
             try
             {
                 LoadUsers();
+                LoadContacts();
             }
             catch
             {
-                Console.WriteLine("[{0}] Error loading users!", DateTime.Now);
+                Console.WriteLine("[{0}] Error data from SQL!", DateTime.Now);
                 state = State_SQLErr;
             }
             server = new TcpListener(ip, port);

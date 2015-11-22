@@ -210,7 +210,13 @@ namespace InstantMessengerServer
                             bw.Write(result.Login);
                         }
                         else bw.Write(0);
-
+                    }
+                    else if (type == IM_AddcontactAdd)
+                    {
+                        String Login = br.ReadString();
+                        Contact cont = new Contact { Id = prog.Contacts.Count, Id_user = Logging.Id, Id_contact = prog.FindLogin(Login).Id, Id_grupp = 0, Name_for_user = Login };
+                        prog.SaveContacts(cont);
+                        prog.Contacts.Add(cont);
                     }
                 }
             }
@@ -239,5 +245,6 @@ namespace InstantMessengerServer
         public const byte IM_ChangePrivacy = 15; //Change privacy
         public const byte IM_AddcontactSearch = 16; //Search request to add new contact
         public const byte IM_AddcontactResult = 17; //Search result to add new contact
+        public const byte IM_AddcontactAdd = 18; //Order to add new contact
     }
 }

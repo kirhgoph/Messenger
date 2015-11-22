@@ -80,6 +80,11 @@ namespace InstantMessenger
             bw.Write(IM_AddcontactSearch);
             bw.Write(e.SearchString);
         }
+        public void Addcontact_Add(AddContactAddEventArgs e)
+        {
+            bw.Write(IM_AddcontactAdd);
+            bw.Write(e.Login);
+        }
    
 
 
@@ -91,6 +96,7 @@ namespace InstantMessenger
         public event IMErrorEventHandler RegisterFailed;
         public event IMReceivedEventHandler MessageReceived;
         public event ProfileReceivedEventHandler ProfileReceived;
+        public event AddContactResultEventHandler AddcontactResult;
 
         virtual protected void OnRegisterOK()
         {
@@ -131,6 +137,11 @@ namespace InstantMessenger
         {
             if (ProfileReceived != null)
                 ProfileReceived(this, e);
+        }
+        public virtual void OnAddcontactResult(AddContactResultEventArgs e)
+        {
+            if (AddcontactResult != null)
+                AddcontactResult(this, e);
         }
         
 
@@ -261,9 +272,9 @@ namespace InstantMessenger
                     {
                         if (br.ReadInt32()!=0)
                         {
-                            AddContact.OnAddcontactResult(new AddContactResultEventArgs(br.ReadString()));
+                            OnAddcontactResult(new AddContactResultEventArgs(br.ReadString()));
                         }
-                        OnAddcontactResult(new AddContactResultEventArgs(null));
+                        //OnAddcontactResult(new AddContactResultEventArgs(null));
                     }
                 }
             }
@@ -292,6 +303,7 @@ namespace InstantMessenger
         public const byte IM_ChangePrivacy = 15; //Change privacy
         public const byte IM_AddcontactSearch = 16; //Search request to add new contact
         public const byte IM_AddcontactResult = 17; //Search result to add new contact
+        public const byte IM_AddcontactAdd = 18; //Order to add new contact
 
         public static bool ValidateCert(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
