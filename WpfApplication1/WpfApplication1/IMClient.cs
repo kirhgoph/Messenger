@@ -24,6 +24,7 @@ namespace InstantMessenger
         public string Server { get { return "localhost"; } }  // Address of server. In this case - local IP address.
         public int Port { get { return 2000; } }
 
+        public List<Contact> ContactList = new List<Contact>();
         public bool IsLoggedIn { get { return _logged; } }
         public string UserName { get { return _user; } }
         public string Password { get { return _pass; } }
@@ -57,6 +58,11 @@ namespace InstantMessenger
         public void GetProfile()
         {
              bw.Write(IM_GetProfile);
+        }
+        public void DeleteContact(string str)
+        {
+            bw.Write(IM_DeleteContact);
+            bw.Write(str);
         }
         public void ChangeStatus(int stat)
         {
@@ -245,38 +251,43 @@ namespace InstantMessenger
 
             try
             {
-                while (client.Connected)  // While we are connected.
+                int SizeOfContactList = br.ReadInt32();
+                for (int i = 0; i < SizeOfContactList; i++)
                 {
-                    byte type = br.ReadByte();  // Get incoming packet type.
-
-                    //if (type == IM_IsAvailable)
-                    //{
-                    //    string user = br.ReadString();
-                    //    bool isAvail = br.ReadBoolean();
-                    //    OnUserAvail(new IMAvailEventArgs(user, isAvail));
-                    //}
-                    if (type == IM_Received)
-                    {
-                        string from = br.ReadString();
-                        string msg = br.ReadString();
-                        OnMessageReceived(new IMReceivedEventArgs(from, msg));
-                    }
-                    if (type == IM_SetProfile)
-                    {
-                        String FirstName = br.ReadString();
-                        String LastName = br.ReadString();
-                        String BirthDate = br.ReadString();
-                        OnProfileReceived(new ProfileReceivedEventArgs(FirstName, LastName, BirthDate));
-                    }
-                    if (type == IM_AddcontactResult)
-                    {
-                        if (br.ReadInt32()!=0)
-                        {
-                            OnAddcontactResult(new AddContactResultEventArgs(br.ReadString()));
-                        }
-                        //OnAddcontactResult(new AddContactResultEventArgs(null));
-                    }
+                    ContactList.Add(new Contact { Id = br.ReadInt32(),Id_user=br.ReadInt32(),Id_contact=br.ReadInt32(),Id_grupp=br.ReadInt32(),Name_for_user=br.ReadString()});
                 }
+                    while (client.Connected)  // While we are connected.
+                    {
+                        byte type = br.ReadByte();  // Get incoming packet type.
+
+                        //if (type == IM_IsAvailable)
+                        //{
+                        //    string user = br.ReadString();
+                        //    bool isAvail = br.ReadBoolean();
+                        //    OnUserAvail(new IMAvailEventArgs(user, isAvail));
+                        //}
+                        if (type == IM_Received)
+                        {
+                            string from = br.ReadString();
+                            string msg = br.ReadString();
+                            OnMessageReceived(new IMReceivedEventArgs(from, msg));
+                        }
+                        if (type == IM_SetProfile)
+                        {
+                            String FirstName = br.ReadString();
+                            String LastName = br.ReadString();
+                            String BirthDate = br.ReadString();
+                            OnProfileReceived(new ProfileReceivedEventArgs(FirstName, LastName, BirthDate));
+                        }
+                        if (type == IM_AddcontactResult)
+                        {
+                            if (br.ReadInt32() != 0)
+                            {
+                                OnAddcontactResult(new AddContactResultEventArgs(br.ReadString()));
+                            }
+                            //OnAddcontactResult(new AddContactResultEventArgs(null));
+                        }
+                    }
             }
             catch (IOException) { }
 
@@ -304,6 +315,7 @@ namespace InstantMessenger
         public const byte IM_AddcontactSearch = 16; //Search request to add new contact
         public const byte IM_AddcontactResult = 17; //Search result to add new contact
         public const byte IM_AddcontactAdd = 18; //Order to add new contact
+        public const byte IM_DeleteContact = 19; //Order to delete contact
 
         public static bool ValidateCert(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
@@ -314,5 +326,30 @@ namespace InstantMessenger
 
             return true; // Allow untrusted certificates.
         }
+    }
+    public class User
+    {
+        public int Id { get; set; }
+        public string First_Name { get; set; }
+        public string Last_name { get; set; }
+        public DateTime Birth_date { get; set; }
+        public string Pass_hash { get; set; }
+        public string Login { get; set; }
+        public string e_mail { get; set; }
+        public int Status { get; set; }
+        public DateTime Date_status { get; set; }
+    }
+    public class Contact
+    {
+        public int Id { get; set; }
+        public int Id_user { get; set; }
+        public int Id_contact { get; set; }
+        public int Id_grupp { get; set; }
+        public string Name_for_user { get; set; }
+    }
+    public class Group
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

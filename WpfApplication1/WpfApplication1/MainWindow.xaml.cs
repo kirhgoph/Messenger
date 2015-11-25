@@ -199,5 +199,22 @@ namespace InstantMessenger
             }));
         }
 
+        private void btn_ContactDelete_Click(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new ThreadStart(delegate
+            {
+                DeleteContact DelCont = new DeleteContact();
+                DelCont.ParentWindow = this;
+                im.ContactList.ForEach(delegate(Contact cnt)
+                {
+                    DelCont.cbx_DeleteContact_List.Items.Add(cnt.Name_for_user);
+                });
+                //DelCont.registerHandler();
+                //AddCont.AddcontactSearch += new AddContactSearchEventHandler(im_AddcontactSearch);
+                //AddCont.AddcontactAdd += new AddContactAddEventHandler(im_AddcontactAdd);
+                DelCont.Show();
+            }));
+        }
+
     }
 }

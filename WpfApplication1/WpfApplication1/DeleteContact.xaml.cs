@@ -19,9 +19,20 @@ namespace InstantMessenger
     /// </summary>
     public partial class DeleteContact : Window
     {
+        public MainWindow ParentWindow { get; set; }
         public DeleteContact()
         {
             InitializeComponent();
+        }
+
+        private void btn_Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void btn_Ok_Click(object sender, RoutedEventArgs e)
+        {
+            ParentWindow.im.DeleteContact(cbx_DeleteContact_List.SelectedValue.ToString());
         }
     }
 }

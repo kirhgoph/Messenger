@@ -133,6 +133,19 @@ namespace InstantMessengerServer
 
             try
             {
+                List<Contact> ContactList = prog.Contacts.FindAll(p => (p.Id_user == Logging.Id));
+                bw.Write(ContactList.Count);
+                for (int i=0; i<ContactList.Count; i++)
+                {
+                    ContactList.ForEach(delegate(Contact cnt)
+                    {
+                        bw.Write(cnt.Id);
+                        bw.Write(cnt.Id_user);
+                        bw.Write(cnt.Id_contact);
+                        bw.Write(cnt.Id_grupp);
+                        bw.Write(cnt.Name_for_user);
+                    });
+                }
                 while (client.Client.Connected)  // While we are connected.
                 {
                     byte type = br.ReadByte();  // Get incoming packet type.
@@ -218,6 +231,11 @@ namespace InstantMessengerServer
                         prog.SaveContacts(cont);
                         prog.Contacts.Add(cont);
                     }
+                    else if (type == IM_DeleteContact)
+                    {
+                        prog.Contacts.Remove()
+                            br.ReadString();
+                    }
                 }
             }
             catch (IOException) { }
@@ -246,5 +264,6 @@ namespace InstantMessengerServer
         public const byte IM_AddcontactSearch = 16; //Search request to add new contact
         public const byte IM_AddcontactResult = 17; //Search result to add new contact
         public const byte IM_AddcontactAdd = 18; //Order to add new contact
+        public const byte IM_DeleteContact = 19; //Order to delete contact
     }
 }
