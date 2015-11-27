@@ -25,6 +25,7 @@ namespace InstantMessenger
         public MainWindow()
         {
             InitializeComponent();
+            im.ParentWindow = this;
             // InstantMessenger Events
             im.LoginOK += new EventHandler(im_LoginOK);
             im.RegisterOK += new EventHandler(im_RegisterOK);
@@ -215,6 +216,31 @@ namespace InstantMessenger
                 DelCont.Show();
             }));
         }
+
+        private void trv_ContactList_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+
+        }
+
+        private void trv_ContactList_Loaded(object sender, RoutedEventArgs e)
+        {
+            im.ContactList.ForEach(delegate(Contact cnt)
+            {
+                trv_ContactList.Items.Add(cnt.Name_for_user);
+            });
+        }
+        public void RefreshTreeView(List<Contact> ContactList)
+        {
+            Dispatcher.BeginInvoke(new ThreadStart(delegate
+            {
+                trv_ContactList.Items.Clear();
+                ContactList.ForEach(delegate(Contact cnt)
+                {
+                    trv_ContactList.Items.Add(cnt.Name_for_user);
+                });
+            }));
+        }
+
 
     }
 }

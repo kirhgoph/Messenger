@@ -14,6 +14,7 @@ namespace InstantMessenger
 {
     public class IMClient
     {
+        public MainWindow ParentWindow;
         Thread tcpThread;      // Receiver
         bool _conn = false;    // Is connected/connecting?
         bool _logged = false;  // Is logged in?
@@ -63,6 +64,7 @@ namespace InstantMessenger
         {
             bw.Write(IM_DeleteContact);
             bw.Write(str);
+            //RefreshContactList();
         }
         public void ChangeStatus(int stat)
         {
@@ -90,6 +92,7 @@ namespace InstantMessenger
         {
             bw.Write(IM_AddcontactAdd);
             bw.Write(e.Login);
+            //RefreshContactList();
         }
    
 
@@ -157,7 +160,18 @@ namespace InstantMessenger
         BinaryReader br;
         BinaryWriter bw;
 
+        void RefreshContactList()
+        {
+            ContactList = new List<Contact>();
+            int SizeOfContactList = br.ReadInt32();
+            for (int i = 0; i < SizeOfContactList; i++)
+            {
+                ContactList.Add(new Contact { Id = br.ReadInt32(), Id_user = br.ReadInt32(), Id_contact = br.ReadInt32(), Id_grupp = br.ReadInt32(), Name_for_user = br.ReadString(),status=br.ReadInt32() });
+            }
+            ParentWindow.RefreshTreeView(ContactList);
+        }
         void SetupConn()  // Setup connection and login
+        
         {
             try 
             {
@@ -251,11 +265,7 @@ namespace InstantMessenger
 
             try
             {
-                int SizeOfContactList = br.ReadInt32();
-                for (int i = 0; i < SizeOfContactList; i++)
-                {
-                    ContactList.Add(new Contact { Id = br.ReadInt32(),Id_user=br.ReadInt32(),Id_contact=br.ReadInt32(),Id_grupp=br.ReadInt32(),Name_for_user=br.ReadString()});
-                }
+                    RefreshContactList();
                     while (client.Connected)  // While we are connected.
                     {
                         byte type = br.ReadByte();  // Get incoming packet type.
@@ -346,6 +356,7 @@ namespace InstantMessenger
         public int Id_contact { get; set; }
         public int Id_grupp { get; set; }
         public string Name_for_user { get; set; }
+        public int status { get; set; }
     }
     public class Group
     {

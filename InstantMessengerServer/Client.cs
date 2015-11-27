@@ -133,19 +133,7 @@ namespace InstantMessengerServer
 
             try
             {
-                List<Contact> ContactList = prog.Contacts.FindAll(p => (p.Id_user == Logging.Id));
-                bw.Write(ContactList.Count);
-                for (int i=0; i<ContactList.Count; i++)
-                {
-                    ContactList.ForEach(delegate(Contact cnt)
-                    {
-                        bw.Write(cnt.Id);
-                        bw.Write(cnt.Id_user);
-                        bw.Write(cnt.Id_contact);
-                        bw.Write(cnt.Id_grupp);
-                        bw.Write(cnt.Name_for_user);
-                    });
-                }
+                RefreshContactList();
                 while (client.Client.Connected)  // While we are connected.
                 {
                     byte type = br.ReadByte();  // Get incoming packet type.
@@ -230,11 +218,12 @@ namespace InstantMessengerServer
                         Contact cont = new Contact { Id = prog.Contacts.Count, Id_user = Logging.Id, Id_contact = prog.FindLogin(Login).Id, Id_grupp = 0, Name_for_user = Login };
                         prog.SaveContacts(cont);
                         prog.Contacts.Add(cont);
+                        //RefreshContactList();
                     }
                     else if (type == IM_DeleteContact)
                     {
-                        prog.Contacts.Remove()
-                            br.ReadString();
+                        prog.Contacts.Remove(prog.Contacts.Find(p => p.Name_for_user == br.ReadString()));
+                        //RefreshContactList();
                     }
                 }
             }
@@ -244,6 +233,23 @@ namespace InstantMessengerServer
             Console.WriteLine("[{0}] ({1}) User logged out", DateTime.Now, Logging.Login);
         }
 
+        public void RefreshContactList()
+        {
+            List<Contact> ContactList = prog.Contacts.FindAll(p => (p.Id_user == Logging.Id));
+            bw.Write(ContactList.Count);
+            for (int i = 0; i < ContactList.Count; i++)
+            {
+                ContactList.ForEach(delegate(Contact cnt)
+                {
+                    bw.Write(cnt.Id);
+                    bw.Write(cnt.Id_user);
+                    bw.Write(cnt.Id_contact);
+                    bw.Write(cnt.Id_grupp);
+                    bw.Write(cnt.Name_for_user);
+                    bw.Write(prog.Users.Find(p => p.Id == cnt.Id_contact).Status);
+                });
+            }
+        }
         public const int IM_Hello = 2012;      // Hello
         public const byte IM_OK = 0;           // OK
         public const byte IM_Login = 1;        // Login
