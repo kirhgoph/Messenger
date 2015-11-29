@@ -218,15 +218,46 @@ namespace InstantMessengerServer
                         Contact cont = new Contact { Id = prog.Contacts.Count, Id_user = Logging.Id, Id_contact = prog.FindLogin(Login).Id, Id_grupp = 0, Name_for_user = Login };
                         prog.SaveContacts(cont);
                         prog.Contacts.Add(cont);
-                        //RefreshContactList();
+                        bw.Write(IM_RefreshContactList);
+                        RefreshContactList();
                     }
                     else if (type == IM_DeleteContact)
                     {
-                        prog.Contacts.Remove(prog.Contacts.Find(p => p.Name_for_user == br.ReadString()));
-                        //RefreshContactList();
+                        Contact cnt = prog.Contacts.Find(p => p.Name_for_user == br.ReadString());
+                        prog.Contacts.Remove(cnt);
+                        prog.DeleteContact(cnt.Id);
+                        bw.Write(IM_RefreshContactList);
+                        RefreshContactList();
+                    }
+                    else if (type == IM_GetSeeingList)
+                    {
+                        bw.Write(IM_SetPrivacyList);
+                        bw.Write("Seeing");
+                        List<Privacy_record> SeeingList = prog.Seeing.FindAll(p => p.Id_user == Logging.Id);
+                        bw.Write(SeeingList.Count);
+                        SeeingList.ForEach(delegate(Privacy_record prv){
+                            bw.Write(prv.Id);
+                            bw.Write(prv.Id_user);
+                            bw.Write(prv.Id_contact);
+                        });
+                    }
+                    else if (type == IM_AddPrivacy)
+                    {
+                        String privacyType = br.ReadString();
+                        int id_user = br.ReadInt32();
+                        Privacy_record prv = new Privacy_record(){Id=0,Id_user=Logging.Id, Id_contact=id_user};
+                        switch (privacyType)
+                        {
+                            case "Seeing":
+                                prv.Id = prog.Seeing.Count;
+                                prog.Seeing.Add(prv);
+                                break;
+                        }
+                        prog.AddPrivacy(privacyType, prv);
                     }
                 }
             }
+            
             catch (IOException) { }
 
             Logging.Status = 0;
@@ -237,19 +268,17 @@ namespace InstantMessengerServer
         {
             List<Contact> ContactList = prog.Contacts.FindAll(p => (p.Id_user == Logging.Id));
             bw.Write(ContactList.Count);
-            for (int i = 0; i < ContactList.Count; i++)
+            ContactList.ForEach(delegate(Contact cnt)
             {
-                ContactList.ForEach(delegate(Contact cnt)
-                {
-                    bw.Write(cnt.Id);
-                    bw.Write(cnt.Id_user);
-                    bw.Write(cnt.Id_contact);
-                    bw.Write(cnt.Id_grupp);
-                    bw.Write(cnt.Name_for_user);
-                    bw.Write(prog.Users.Find(p => p.Id == cnt.Id_contact).Status);
-                });
-            }
+                bw.Write(cnt.Id);
+                bw.Write(cnt.Id_user);
+                bw.Write(cnt.Id_contact);
+                bw.Write(cnt.Id_grupp);
+                bw.Write(cnt.Name_for_user);
+                bw.Write(prog.Users.Find(p => p.Id == cnt.Id_contact).Status);
+            });
         }
+
         public const int IM_Hello = 2012;      // Hello
         public const byte IM_OK = 0;           // OK
         public const byte IM_Login = 1;        // Login
@@ -271,5 +300,9 @@ namespace InstantMessengerServer
         public const byte IM_AddcontactResult = 17; //Search result to add new contact
         public const byte IM_AddcontactAdd = 18; //Order to add new contact
         public const byte IM_DeleteContact = 19; //Order to delete contact
+        public const byte IM_RefreshContactList = 20; //Order to refresh contact list
+        public const byte IM_GetSeeingList = 21; //Get list of Seeing
+        public const byte IM_SetPrivacyList = 22;//Set list of Seeing
+        public const byte IM_AddPrivacy = 23;//Add entry to one of privacy lists
     }
 }

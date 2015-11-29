@@ -7,7 +7,7 @@
         <Label Content="Delete contact" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="128"/>
         <Button Content="Ok" HorizontalAlignment="Left" Height="23" Margin="10,72,0,-13" VerticalAlignment="Top" Width="45"/>
         <Button Content="Cancel" HorizontalAlignment="Left" Height="23" Margin="80,72,0,-13" VerticalAlignment="Top" Width="75"/>
-        <ComboBox x:Name="cbx_DeleteContact_List" HorizontalAlignment="Left" Margin="10,41,0,-63" VerticalAlignment="Top" Width="270"/>
+        <ComboBox x:Name="cbx_DeleteContact_List" HorizontalAlignment="Left" Margin="10,41,0,-63" VerticalAlignment="Top" Width="270" SelectionChanged="cbx_DeleteContact_List_SelectionChanged"/>
         <Label Content="Delete contact" HorizontalAlignment="Left" Margin="10,10,0,-36" VerticalAlignment="Top" Width="128"/>
         <Button x:Name="btn_Ok" Content="Ok" HorizontalAlignment="Left" Height="23" Margin="10,72,0,-95" VerticalAlignment="Top" Width="45" Click="btn_Ok_Click" IsEnabled="False"/>
         <Button x:Name="btn_Cancel" Content="Cancel" HorizontalAlignment="Left" Height="23" Margin="80,72,0,-95" VerticalAlignment="Top" Width="75" IsCancel="True" Click="btn_Cancel_Click"/>

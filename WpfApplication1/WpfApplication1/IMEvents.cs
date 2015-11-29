@@ -14,6 +14,7 @@ namespace InstantMessenger
         NoExists = IMClient.IM_NoExists,
         WrongPassword = IMClient.IM_WrongPass
     }
+
     public class IMErrorEventArgs : EventArgs
     {
         IMError err;
@@ -51,7 +52,6 @@ namespace InstantMessenger
             this.Login = Login;
         }
     }
-
     public class AddContactSearchEventArgs : EventArgs
     {
         public string SearchString { get; set; }
@@ -83,12 +83,22 @@ namespace InstantMessenger
             this.BirthDate= BirthDate;
         }
     }
+    public class PrivacyListReceivedEventArgs : EventArgs
+    {
+        public String type { get; set; }//type of privacy list 
+        public List<Privacy_record> PrivacyList{ get; set; }
+        public PrivacyListReceivedEventArgs(String type,List<Privacy_record> PrivacyList)
+        {
+            this.type = type;
+            this.PrivacyList = PrivacyList;
+        }
+    }
     
     public delegate void IMErrorEventHandler(object sender, IMErrorEventArgs e);
-
     public delegate void IMReceivedEventHandler(object sender, IMReceivedEventArgs e);
     public delegate void ProfileReceivedEventHandler(object sender, ProfileReceivedEventArgs e);
     public delegate void AddContactAddEventHandler(object sender, AddContactAddEventArgs e);
     public delegate void AddContactSearchEventHandler(object sender, AddContactSearchEventArgs e);
     public delegate void AddContactResultEventHandler(object sender, AddContactResultEventArgs e);
+    public delegate void PrivacyListReceivedEventHandler(object sender, PrivacyListReceivedEventArgs e);
 }

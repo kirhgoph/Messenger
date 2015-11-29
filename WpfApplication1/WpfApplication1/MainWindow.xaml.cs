@@ -34,6 +34,7 @@ namespace InstantMessenger
             im.RegisterFailed += new IMErrorEventHandler(im_RegisterFailed);
             im.Disconnected += new EventHandler(im_Disconnected);
             im.ProfileReceived += new ProfileReceivedEventHandler(im_ProfileReceived);
+            im.PrivacyListReceived += new PrivacyListReceivedEventHandler(im_PrivacyListReceived);
         }
         void im_AddcontactAdd(object sender, AddContactAddEventArgs e)
         {
@@ -152,6 +153,36 @@ namespace InstantMessenger
                 prof.Show();
             }));
         }
+        void im_PrivacyListReceived(object sender, PrivacyListReceivedEventArgs e)
+        {
+            switch(e.type)
+            {
+                case "Seeing":
+                    Dispatcher.BeginInvoke(new ThreadStart(delegate
+                    {
+                        
+                        Seeing seeing = new Seeing();
+                        seeing.lbx_SeeingList.Items.Clear();
+                        seeing.cbx_AddSeeing.Items.Clear();
+                        seeing.cbx_DeleteSeeing.Items.Clear();
+                        e.PrivacyList.ForEach(delegate(Privacy_record prv)
+                        {
+                            seeing.lbx_SeeingList.Items.Add(im.ContactList.Find(p => p.Id_user == prv.Id_contact).Name_for_user);
+                            seeing.cbx_DeleteSeeing.Items.Add(im.ContactList.Find(p => p.Id_user == prv.Id_contact).Name_for_user);
+                        });
+                        im.ContactList.ForEach(delegate(Contact usr)
+                        {
+                            if (e.PrivacyList.Find(p=> p.Id_contact==usr.Id_contact)==null)
+                            {
+                                seeing.cbx_AddSeeing.Items.Add(usr.Name_for_user);
+                            }
+                        });
+                        seeing.ParentWindow = this;
+                        seeing.Show();
+                    }));
+                    break;
+            }
+        }
         void im_ProfileSave(object sender, ProfileReceivedEventArgs e)
         {
             im.SaveProfile(e);
@@ -239,6 +270,11 @@ namespace InstantMessenger
                     trv_ContactList.Items.Add(cnt.Name_for_user);
                 });
             }));
+        }
+
+        private void btn_Seeing_Click(object sender, RoutedEventArgs e)
+        {
+            im.GetSeeingList();
         }
 
 

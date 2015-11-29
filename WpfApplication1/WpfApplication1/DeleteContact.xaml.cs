@@ -33,6 +33,12 @@ namespace InstantMessenger
         private void btn_Ok_Click(object sender, RoutedEventArgs e)
         {
             ParentWindow.im.DeleteContact(cbx_DeleteContact_List.SelectedValue.ToString());
+            this.Close();
+        }
+
+        private void cbx_DeleteContact_List_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            btn_Ok.IsEnabled = true;
         }
     }
 }

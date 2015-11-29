@@ -1,11 +1,14 @@
 ﻿<Window x:Class="InstantMessenger.Seeing"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Seeing" Height="257" Width="300">
+        Title="Seeing" Height="294.313" Width="300">
     <Grid>
-        <ListBox HorizontalAlignment="Left" Height="150" Margin="10,45,0,0" VerticalAlignment="Top" Width="272"/>
+        <ListBox x:Name="lbx_SeeingList" HorizontalAlignment="Left" Height="107" Margin="10,45,0,0" VerticalAlignment="Top" Width="272"/>
         <Label Content="List of Seeing" HorizontalAlignment="Left" Height="30" Margin="10,10,0,0" VerticalAlignment="Top" Width="85"/>
-        <Button Content="Ok" HorizontalAlignment="Left" Height="26" Margin="180,200,0,0" VerticalAlignment="Top" Width="40"/>
-        <Button Content="Cancel" HorizontalAlignment="Left" Height="26" Margin="225,200,0,0" VerticalAlignment="Top" Width="57"/>
+        <Button Content="Close" HorizontalAlignment="Left" Height="26" Margin="225,228,0,0" VerticalAlignment="Top" Width="57" IsDefault="True" IsCancel="True" Click="Button_Click"/>
+        <ComboBox x:Name="cbx_DeleteSeeing" HorizontalAlignment="Left" Margin="10,157,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="cbx_DeleteSeeing_SelectionChanged"/>
+        <ComboBox x:Name="cbx_AddSeeing" HorizontalAlignment="Left" Margin="10,189,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="cbx_AddSeeing_SelectionChanged"/>
+        <Button x:Name="btn_DeleteSeeing" Content="Delete Seeing" HorizontalAlignment="Left" Margin="159,157,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
+        <Button x:Name="btn_AddSeeing" Content="Add Seeing" HorizontalAlignment="Left" Margin="159,189,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="btn_AddSeeing_Click"/>
     </Grid>
 </Window>

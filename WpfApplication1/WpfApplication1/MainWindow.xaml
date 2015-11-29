@@ -42,7 +42,7 @@
         <Border BorderBrush="Black" BorderThickness="1" Height="2" Margin="2,203,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="184"/>
         <Label Content="History:" HorizontalAlignment="Left" Height="22" VerticalAlignment="Top" Width="43" FontFamily="Times New Roman" FontSize="10" Margin="185,21,0,0"/>
         <Label Content="Choose your status:" HorizontalAlignment="Left" Height="22" VerticalAlignment="Top" Width="107" FontFamily="Times New Roman" FontSize="10" Margin="73,27,0,0" Grid.Row="1"/>
-        <Button x:Name="btn_Seeing" Content="Seeing" HorizontalAlignment="Left" Height="20" Margin="10,210,0,0" VerticalAlignment="Top" Width="50" Grid.RowSpan="2" IsEnabled="False"/>
+        <Button x:Name="btn_Seeing" Content="Seeing" HorizontalAlignment="Left" Height="20" Margin="10,210,0,0" VerticalAlignment="Top" Width="50" Grid.RowSpan="2" IsEnabled="False" Click="btn_Seeing_Click"/>
         <Button x:Name="btn_Ignored" Content="Ignored" HorizontalAlignment="Left" Height="20" Margin="124,210,0,0" VerticalAlignment="Top" Width="50" Grid.RowSpan="2" IsEnabled="False"/>
         <Button x:Name="btn_Profile" Content="Profile" HorizontalAlignment="Left" Height="20" Margin="10,20,0,0" VerticalAlignment="Top" Width="50" Grid.Row="1" Click="Profile_Click" IsEnabled="False"/>
         <TreeView x:Name="trv_ContactList" HorizontalAlignment="Left" Height="160" Margin="2,43,0,0" VerticalAlignment="Top" Width="183" Loaded="trv_ContactList_Loaded" DataContextChanged="trv_ContactList_DataContextChanged"/>

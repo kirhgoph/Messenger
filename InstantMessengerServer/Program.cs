@@ -124,6 +124,19 @@ namespace InstantMessengerServer
                 Console.WriteLine(e.ToString());
             }
         }
+        public void DeleteContact(int id)
+        {
+            String com = "DELETE FROM [Messenger].[dbo].[Contacts] Where Id=" + id + ";";
+            SqlCommand myCommand = new SqlCommand(com, SQLConnection);
+            try
+            {
+                myCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
         public void LoadGroups()
         {
             SqlCommand myCommand = new SqlCommand("SELECT *  FROM [Messenger].[dbo].[Grupps];", SQLConnection);
@@ -139,6 +152,56 @@ namespace InstantMessengerServer
             //myCommand.ExecuteNonQuery();
             //myCommand.CommandText = "INSERT INTO table dbo.User (Login, [e-mail], Pass_hash) values ('" + userName + "','" + userName + "','" + password + "')";
             //myCommand.ExecuteNonQuery();
+        }
+        public void LoadPrivacy(string PrivacyType)
+        {
+            string com=null;
+            switch(PrivacyType)
+            { 
+                case "Seeing":
+                    com = "SELECT *  FROM [Messenger].[dbo].[List_vis];";
+                    break;
+            }
+            SqlCommand myCommand = new SqlCommand(com, SQLConnection);
+            SqlDataReader myReader = null;
+            myReader = myCommand.ExecuteReader();
+            try
+            {
+                while (myReader.Read())
+                {
+                    Privacy_record prv = new Privacy_record() { Id = SafeGetInt(myReader, 0), Id_user= SafeGetInt(myReader, 1), Id_contact = SafeGetInt(myReader, 2)};
+                    switch(PrivacyType)
+                    {
+                        case "Seeing":
+                            Seeing.Add(prv);
+                            break;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            myReader.Close();
+        }
+        public void AddPrivacy(string PrivacyType, Privacy_record prv)
+        {
+            string com = null;
+            switch (PrivacyType)
+            {
+                case "Seeing":
+                    com = "INSERT into [Messenger].[dbo].[List_vis] (Id, Id_user, Id_contact) values(" + prv.Id + "," + prv.Id_user + "," + prv.Id_contact + ");";
+                    break;
+            }
+            SqlCommand myCommand = new SqlCommand(com, SQLConnection);
+            try
+            {
+                myCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
         public User FindLogin(string Login)
         {
@@ -165,6 +228,7 @@ namespace InstantMessengerServer
         public const int State_OK = 0;
         public const int State_TCPErr = 1;
         public const int State_SQLErr = 2;
+        public List<Privacy_record> Seeing = new List<Privacy_record>();
         public List<User> Users = new List<User>();
         public List<Contact> Contacts = new List<Contact>();
         public List<Group> Groups= new List<Group>();
@@ -193,6 +257,7 @@ namespace InstantMessengerServer
             {
                 LoadUsers();
                 LoadContacts();
+                LoadPrivacy("Seeing");
             }
             catch
             {
@@ -226,6 +291,12 @@ namespace InstantMessengerServer
             }
         }
 
+    }
+    public class Privacy_record
+    {
+        public int Id { get; set; }
+        public int Id_user { get; set; }
+        public int Id_contact { get; set; }
     }
     public class User
     {

@@ -26,6 +26,9 @@ namespace InstantMessenger
         public int Port { get { return 2000; } }
 
         public List<Contact> ContactList = new List<Contact>();
+        public List<Privacy_record> SeeingList = new List<Privacy_record>();
+        public List<Privacy_record> UnseeingList = new List<Privacy_record>();
+        public List<Privacy_record> IgnoringList = new List<Privacy_record>();
         public bool IsLoggedIn { get { return _logged; } }
         public string UserName { get { return _user; } }
         public string Password { get { return _pass; } }
@@ -64,7 +67,6 @@ namespace InstantMessenger
         {
             bw.Write(IM_DeleteContact);
             bw.Write(str);
-            //RefreshContactList();
         }
         public void ChangeStatus(int stat)
         {
@@ -76,6 +78,20 @@ namespace InstantMessenger
             bw.Write(IM_ChangePrivacy);
             bw.Write(priv);
         }
+        public void AddPrivacy(string PrivacyType,int Id_user)
+        {
+            bw.Write(IM_AddPrivacy);
+            bw.Write(PrivacyType);
+            bw.Write(Id_user);
+        }
+        public void GetSeeingList()
+        {
+            bw.Write(IM_GetSeeingList);
+        }
+
+
+
+
         public void SaveProfile(ProfileReceivedEventArgs e)
         {
             bw.Write(IM_SaveProfile);
@@ -92,7 +108,6 @@ namespace InstantMessenger
         {
             bw.Write(IM_AddcontactAdd);
             bw.Write(e.Login);
-            //RefreshContactList();
         }
    
 
@@ -106,6 +121,7 @@ namespace InstantMessenger
         public event IMReceivedEventHandler MessageReceived;
         public event ProfileReceivedEventHandler ProfileReceived;
         public event AddContactResultEventHandler AddcontactResult;
+        public event PrivacyListReceivedEventHandler PrivacyListReceived;
 
         virtual protected void OnRegisterOK()
         {
@@ -152,6 +168,11 @@ namespace InstantMessenger
             if (AddcontactResult != null)
                 AddcontactResult(this, e);
         }
+        public virtual void OnPrivacyListReceived(PrivacyListReceivedEventArgs e)
+        {
+            if (PrivacyListReceived != null)
+                PrivacyListReceived(this, e);
+        }
         
 
         TcpClient client;
@@ -166,7 +187,8 @@ namespace InstantMessenger
             int SizeOfContactList = br.ReadInt32();
             for (int i = 0; i < SizeOfContactList; i++)
             {
-                ContactList.Add(new Contact { Id = br.ReadInt32(), Id_user = br.ReadInt32(), Id_contact = br.ReadInt32(), Id_grupp = br.ReadInt32(), Name_for_user = br.ReadString(),status=br.ReadInt32() });
+                Contact cnt = new Contact { Id = br.ReadInt32(), Id_user = br.ReadInt32(), Id_contact = br.ReadInt32(), Id_grupp = br.ReadInt32(), Name_for_user = br.ReadString(), status = br.ReadInt32() };
+                ContactList.Add(cnt);
             }
             ParentWindow.RefreshTreeView(ContactList);
         }
@@ -297,8 +319,30 @@ namespace InstantMessenger
                             }
                             //OnAddcontactResult(new AddContactResultEventArgs(null));
                         }
+                        if (type == IM_RefreshContactList)
+                        {
+                            RefreshContactList();
+                        }
+                        if (type == IM_SetPrivacyList)
+                        {
+                            string PrivacyListType = br.ReadString();
+                            int PrivacyListCount = br.ReadInt32();
+                            switch(PrivacyListType)
+                            { 
+                                case "Seeing":                    
+                                    for (int i = 0; i < PrivacyListCount; i++)
+                                      {
+                                      SeeingList.Add(new Privacy_record { Id = br.ReadInt32(), Id_user = br.ReadInt32(), Id_contact = br.ReadInt32() });
+                                      }
+                                    OnPrivacyListReceived(new PrivacyListReceivedEventArgs(PrivacyListType, SeeingList));
+                                    break;
+
+                            }
+
+                        }
                     }
             }
+            
             catch (IOException) { }
 
             _logged = false;
@@ -326,6 +370,10 @@ namespace InstantMessenger
         public const byte IM_AddcontactResult = 17; //Search result to add new contact
         public const byte IM_AddcontactAdd = 18; //Order to add new contact
         public const byte IM_DeleteContact = 19; //Order to delete contact
+        public const byte IM_RefreshContactList = 20; //Order to refresh contact list
+        public const byte IM_GetSeeingList = 21; //Get list of Seeing
+        public const byte IM_SetPrivacyList = 22;//Set list of Seeing
+        public const byte IM_AddPrivacy = 23;//Add entry to one of privacy lists
 
         public static bool ValidateCert(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
@@ -336,6 +384,13 @@ namespace InstantMessenger
 
             return true; // Allow untrusted certificates.
         }
+    }
+
+    public class Privacy_record
+    {
+        public int Id { get; set; }
+        public int Id_user { get; set; }
+        public int Id_contact { get; set; }
     }
     public class User
     {
