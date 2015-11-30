@@ -8,7 +8,7 @@
         <Button Content="Close" HorizontalAlignment="Left" Height="26" Margin="225,228,0,0" VerticalAlignment="Top" Width="57" IsDefault="True" IsCancel="True" Click="Button_Click"/>
         <ComboBox x:Name="cbx_DeleteSeeing" HorizontalAlignment="Left" Margin="10,157,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="cbx_DeleteSeeing_SelectionChanged"/>
         <ComboBox x:Name="cbx_AddSeeing" HorizontalAlignment="Left" Margin="10,189,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="cbx_AddSeeing_SelectionChanged"/>
-        <Button x:Name="btn_DeleteSeeing" Content="Delete Seeing" HorizontalAlignment="Left" Margin="159,157,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
+        <Button x:Name="btn_DeleteSeeing" Content="Delete Seeing" HorizontalAlignment="Left" Margin="159,157,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="btn_DeleteSeeing_Click"/>
         <Button x:Name="btn_AddSeeing" Content="Add Seeing" HorizontalAlignment="Left" Margin="159,189,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="btn_AddSeeing_Click"/>
     </Grid>
 </Window>

@@ -57,8 +57,8 @@
     <Compile Include="AddContact.xaml.cs">
       <DependentUpon>AddContact.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Ignored.xaml.cs">
-      <DependentUpon>Ignored.xaml</DependentUpon>
+    <Compile Include="Ignoring.xaml.cs">
+      <DependentUpon>Ignoring.xaml</DependentUpon>
     </Compile>
     <Compile Include="IMClient.cs" />
     <Compile Include="IMEvents.cs" />
@@ -75,7 +75,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Ignored.xaml">
+    <Page Include="Ignoring.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -161,6 +161,12 @@ namespace InstantMessengerServer
                 case "Seeing":
                     com = "SELECT *  FROM [Messenger].[dbo].[List_vis];";
                     break;
+                case "Unseeing":
+                    com = "SELECT *  FROM [Messenger].[dbo].[List_invis];";
+                    break;
+                case "Ignoring":
+                    com = "SELECT *  FROM [Messenger].[dbo].[List_ignor];";
+                    break;
             }
             SqlCommand myCommand = new SqlCommand(com, SQLConnection);
             SqlDataReader myReader = null;
@@ -174,6 +180,12 @@ namespace InstantMessengerServer
                     {
                         case "Seeing":
                             Seeing.Add(prv);
+                            break;
+                        case "Unseeing":
+                            Unseeing.Add(prv);
+                            break;
+                        case "Ignoring":
+                            Ignoring.Add(prv);
                             break;
                     }
                 }
@@ -191,6 +203,37 @@ namespace InstantMessengerServer
             {
                 case "Seeing":
                     com = "INSERT into [Messenger].[dbo].[List_vis] (Id, Id_user, Id_contact) values(" + prv.Id + "," + prv.Id_user + "," + prv.Id_contact + ");";
+                    break;
+                case "Unseeing":
+                    com = "INSERT into [Messenger].[dbo].[List_invis] (Id, Id_user, Id_contact) values(" + prv.Id + "," + prv.Id_user + "," + prv.Id_contact + ");";
+                    break;
+                case "Ignoring":
+                    com = "INSERT into [Messenger].[dbo].[List_ignor] (Id, Id_user, Id_contact) values(" + prv.Id + "," + prv.Id_user + "," + prv.Id_contact + ");";
+                    break;
+            }
+            SqlCommand myCommand = new SqlCommand(com, SQLConnection);
+            try
+            {
+                myCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+        public void DeletePrivacy(string PrivacyType, Privacy_record prv)
+        {
+            string com = null;
+            switch (PrivacyType)
+            {
+                case "Seeing":
+                    com = "DELETE from [Messenger].[dbo].[List_vis] where Id_user="+prv.Id_user+"and Id_contact="+prv.Id_contact+";";
+                    break;
+                case "Unseeing":
+                    com = "DELETE from [Messenger].[dbo].[List_invis] where Id_user=" + prv.Id_user + "and Id_contact=" + prv.Id_contact + ";";
+                    break;
+                case "Ignoring":
+                    com = "DELETE from [Messenger].[dbo].[List_ignor] where Id_user=" + prv.Id_user + "and Id_contact=" + prv.Id_contact + ";";
                     break;
             }
             SqlCommand myCommand = new SqlCommand(com, SQLConnection);
@@ -229,6 +272,8 @@ namespace InstantMessengerServer
         public const int State_TCPErr = 1;
         public const int State_SQLErr = 2;
         public List<Privacy_record> Seeing = new List<Privacy_record>();
+        public List<Privacy_record> Unseeing = new List<Privacy_record>();
+        public List<Privacy_record> Ignoring = new List<Privacy_record>();
         public List<User> Users = new List<User>();
         public List<Contact> Contacts = new List<Contact>();
         public List<Group> Groups= new List<Group>();
@@ -258,6 +303,8 @@ namespace InstantMessengerServer
                 LoadUsers();
                 LoadContacts();
                 LoadPrivacy("Seeing");
+                LoadPrivacy("Unseeing");
+                LoadPrivacy("Ignoring");
             }
             catch
             {

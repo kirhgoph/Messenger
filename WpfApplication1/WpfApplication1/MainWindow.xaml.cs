@@ -167,8 +167,8 @@ namespace InstantMessenger
                         seeing.cbx_DeleteSeeing.Items.Clear();
                         e.PrivacyList.ForEach(delegate(Privacy_record prv)
                         {
-                            seeing.lbx_SeeingList.Items.Add(im.ContactList.Find(p => p.Id_user == prv.Id_contact).Name_for_user);
-                            seeing.cbx_DeleteSeeing.Items.Add(im.ContactList.Find(p => p.Id_user == prv.Id_contact).Name_for_user);
+                            seeing.lbx_SeeingList.Items.Add(im.ContactList.Find(p => p.Id_contact == prv.Id_contact).Name_for_user);
+                            seeing.cbx_DeleteSeeing.Items.Add(im.ContactList.Find(p => p.Id_contact == prv.Id_contact).Name_for_user);
                         });
                         im.ContactList.ForEach(delegate(Contact usr)
                         {
@@ -179,6 +179,54 @@ namespace InstantMessenger
                         });
                         seeing.ParentWindow = this;
                         seeing.Show();
+                    }));
+                    break;
+                case "Unseeing":
+                    Dispatcher.BeginInvoke(new ThreadStart(delegate
+                    {
+
+                        Unseeing unseeing = new Unseeing();
+                        unseeing.lbx_UnseeingList.Items.Clear();
+                        unseeing.cbx_AddUnseeing.Items.Clear();
+                        unseeing.cbx_DeleteUnseeing.Items.Clear();
+                        e.PrivacyList.ForEach(delegate(Privacy_record prv)
+                        {
+                            unseeing.lbx_UnseeingList.Items.Add(im.ContactList.Find(p => p.Id_contact == prv.Id_contact).Name_for_user);
+                            unseeing.cbx_DeleteUnseeing.Items.Add(im.ContactList.Find(p => p.Id_contact == prv.Id_contact).Name_for_user);
+                        });
+                        im.ContactList.ForEach(delegate(Contact usr)
+                        {
+                            if (e.PrivacyList.Find(p => p.Id_contact == usr.Id_contact) == null)
+                            {
+                                unseeing.cbx_AddUnseeing.Items.Add(usr.Name_for_user);
+                            }
+                        });
+                        unseeing.ParentWindow = this;
+                        unseeing.Show();
+                    }));
+                    break;
+                case "Ignoring":
+                    Dispatcher.BeginInvoke(new ThreadStart(delegate
+                    {
+
+                        Ignoring ignoring = new Ignoring();
+                        ignoring.lbx_IgnoringList.Items.Clear();
+                        ignoring.cbx_AddIgnoring.Items.Clear();
+                        ignoring.cbx_DeleteIgnoring.Items.Clear();
+                        e.PrivacyList.ForEach(delegate(Privacy_record prv)
+                        {
+                            ignoring.lbx_IgnoringList.Items.Add(im.ContactList.Find(p => p.Id_contact == prv.Id_contact).Name_for_user);
+                            ignoring.cbx_DeleteIgnoring.Items.Add(im.ContactList.Find(p => p.Id_contact == prv.Id_contact).Name_for_user);
+                        });
+                        im.ContactList.ForEach(delegate(Contact usr)
+                        {
+                            if (e.PrivacyList.Find(p => p.Id_contact == usr.Id_contact) == null)
+                            {
+                                ignoring.cbx_AddIgnoring.Items.Add(usr.Name_for_user);
+                            }
+                        });
+                        ignoring.ParentWindow = this;
+                        ignoring.Show();
                     }));
                     break;
             }
@@ -275,6 +323,16 @@ namespace InstantMessenger
         private void btn_Seeing_Click(object sender, RoutedEventArgs e)
         {
             im.GetSeeingList();
+        }
+
+        private void btn_Unseeing_Click(object sender, RoutedEventArgs e)
+        {
+            im.GetUnseeingList();
+        }
+
+        private void btn_Ignored_Click(object sender, RoutedEventArgs e)
+        {
+            im.GetIgnoringList();
         }
 
 

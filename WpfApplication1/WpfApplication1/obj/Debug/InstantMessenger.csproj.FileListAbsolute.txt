@@ -53,14 +53,12 @@ C:\Messenger\WpfApplication1\WpfApplication1\bin\Debug\WpfApplication1.exe
 C:\Messenger\WpfApplication1\WpfApplication1\bin\Debug\WpfApplication1.pdb
 C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\InstantMessenger.csprojResolveAssemblyReference.cache
 C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\DeleteContact.baml
-C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\Ignored.baml
 C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\MainWindow.baml
 C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\AddContact.baml
 C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\Profile.baml
 C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\Seeing.baml
 C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\Unseeing.baml
 C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\DeleteContact.g.cs
-C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\Ignored.g.cs
 C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\MainWindow.g.cs
 C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\AddContact.g.cs
 C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\Profile.g.cs
@@ -73,3 +71,5 @@ C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\InstantMessenger.Properti
 C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\InstantMessenger.csproj.GenerateResource.Cache
 C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\WpfApplication1.exe
 C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\WpfApplication1.pdb
+C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\Ignoring.baml
+C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\Ignoring.g.cs

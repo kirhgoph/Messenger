@@ -37,13 +37,20 @@ namespace InstantMessenger
 
         private void btn_AddSeeing_Click(object sender, RoutedEventArgs e)
         {
-            ParentWindow.im.AddPrivacy("Seeing", ParentWindow.im.ContactList.Find(p => p.Name_for_user == cbx_AddSeeing.SelectedItem.ToString()).Id_user);
+            ParentWindow.im.AddPrivacy("Seeing", ParentWindow.im.ContactList.Find(p => p.Name_for_user == cbx_AddSeeing.SelectedItem.ToString()).Id_contact);
             MessageBox.Show("Added");
             this.Close();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            this.Close();
+        }
+
+        private void btn_DeleteSeeing_Click(object sender, RoutedEventArgs e)
+        {
+            ParentWindow.im.DeletePrivacy("Seeing", ParentWindow.im.ContactList.Find(p => p.Name_for_user == cbx_DeleteSeeing.SelectedItem.ToString()).Id_contact);
+            MessageBox.Show("Deleted");
             this.Close();
         }
     }

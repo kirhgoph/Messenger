@@ -200,6 +200,10 @@ namespace InstantMessengerServer
                     {
                         Logging.Status = Logging.Status - Logging.Status % 10 + (br.ReadInt32()+1);
                         prog.EditUsers(Logging);
+                        prog.Contacts.FindAll(p=> p.Id_contact==Logging.Id).ForEach(delegate(Contact cnt)
+                        {
+                            prog.Users.Find(p => p.Id == cnt.Id_user).Connection.bw.Write(IM_RefreshContactList);
+                        });
                     }
                     else if (type == IM_AddcontactSearch)
                     {
@@ -226,6 +230,10 @@ namespace InstantMessengerServer
                         Contact cnt = prog.Contacts.Find(p => p.Name_for_user == br.ReadString());
                         prog.Contacts.Remove(cnt);
                         prog.DeleteContact(cnt.Id);
+                        Privacy_record prv = new Privacy_record(){Id=0, Id_user=Logging.Id,Id_contact=cnt.Id};
+                        prog.Seeing.Remove(prog.Seeing.Find(p=> (p.Id_user==prv.Id_user)&&(p.Id_contact==prv.Id_contact)));
+                        prog.Unseeing.Remove(prog.Seeing.Find(p => (p.Id_user == prv.Id_user) && (p.Id_contact == prv.Id_contact)));
+                        prog.Ignoring.Remove(prog.Seeing.Find(p => (p.Id_user == prv.Id_user) && (p.Id_contact == prv.Id_contact)));
                         bw.Write(IM_RefreshContactList);
                         RefreshContactList();
                     }
@@ -236,6 +244,32 @@ namespace InstantMessengerServer
                         List<Privacy_record> SeeingList = prog.Seeing.FindAll(p => p.Id_user == Logging.Id);
                         bw.Write(SeeingList.Count);
                         SeeingList.ForEach(delegate(Privacy_record prv){
+                            bw.Write(prv.Id);
+                            bw.Write(prv.Id_user);
+                            bw.Write(prv.Id_contact);
+                        });
+                    }
+                    else if (type == IM_GetUnseeingList)
+                    {
+                        bw.Write(IM_SetPrivacyList);
+                        bw.Write("Unseeing");
+                        List<Privacy_record> UnseeingList = prog.Unseeing.FindAll(p => p.Id_user == Logging.Id);
+                        bw.Write(UnseeingList.Count);
+                        UnseeingList.ForEach(delegate(Privacy_record prv)
+                        {
+                            bw.Write(prv.Id);
+                            bw.Write(prv.Id_user);
+                            bw.Write(prv.Id_contact);
+                        });
+                    }
+                    else if (type == IM_GetIgnoringList)
+                    {
+                        bw.Write(IM_SetPrivacyList);
+                        bw.Write("Ignoring");
+                        List<Privacy_record> IgnoringList = prog.Ignoring.FindAll(p => p.Id_user == Logging.Id);
+                        bw.Write(IgnoringList.Count);
+                        IgnoringList.ForEach(delegate(Privacy_record prv)
+                        {
                             bw.Write(prv.Id);
                             bw.Write(prv.Id_user);
                             bw.Write(prv.Id_contact);
@@ -252,8 +286,38 @@ namespace InstantMessengerServer
                                 prv.Id = prog.Seeing.Count;
                                 prog.Seeing.Add(prv);
                                 break;
+                            case "Unseeing":
+                                prv.Id = prog.Unseeing.Count;
+                                prog.Unseeing.Add(prv);
+                                break;
+                            case "Ignoring":
+                                prv.Id = prog.Ignoring.Count;
+                                prog.Ignoring.Add(prv);
+                                break;
                         }
                         prog.AddPrivacy(privacyType, prv);
+                    }
+                    else if (type == IM_DeletePrivacy)
+                    {
+                        String privacyType = br.ReadString();
+                        int id_user = br.ReadInt32();
+                        Privacy_record prv = new Privacy_record() { Id = 0, Id_user = Logging.Id, Id_contact = id_user };
+                        switch (privacyType)
+                        {
+                            case "Seeing":
+                                prv.Id = prog.Seeing.Count;
+                                prog.Seeing.Remove(prog.Seeing.Find(p=> (p.Id_user==prv.Id_user) &&(p.Id_contact==prv.Id_contact)));
+                                break;
+                            case "Unseeing":
+                                prv.Id = prog.Unseeing.Count;
+                                prog.Unseeing.Remove(prog.Unseeing.Find(p => (p.Id_user == prv.Id_user) && (p.Id_contact == prv.Id_contact)));
+                                break;
+                            case "Ignoring":
+                                prv.Id = prog.Ignoring.Count;
+                                prog.Ignoring.Remove(prog.Ignoring.Find(p => (p.Id_user == prv.Id_user) && (p.Id_contact == prv.Id_contact)));
+                                break;
+                        }
+                        prog.DeletePrivacy(privacyType, prv);
                     }
                 }
             }
@@ -304,5 +368,8 @@ namespace InstantMessengerServer
         public const byte IM_GetSeeingList = 21; //Get list of Seeing
         public const byte IM_SetPrivacyList = 22;//Set list of Seeing
         public const byte IM_AddPrivacy = 23;//Add entry to one of privacy lists
+        public const byte IM_DeletePrivacy = 24;//Delete entry from one of privacy lists
+        public const byte IM_GetUnseeingList = 25;//Get list of Unseeing
+        public const byte IM_GetIgnoringList = 26;//Get list of Ignoring
     }
 }

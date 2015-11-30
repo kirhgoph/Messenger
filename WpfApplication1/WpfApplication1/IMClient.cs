@@ -84,13 +84,24 @@ namespace InstantMessenger
             bw.Write(PrivacyType);
             bw.Write(Id_user);
         }
+        public void DeletePrivacy(string PrivacyType, int Id_user)
+        {
+            bw.Write(IM_DeletePrivacy);
+            bw.Write(PrivacyType);
+            bw.Write(Id_user);
+        }
         public void GetSeeingList()
         {
             bw.Write(IM_GetSeeingList);
         }
-
-
-
+        public void GetUnseeingList()
+        {
+            bw.Write(IM_GetUnseeingList);
+        }
+        public void GetIgnoringList()
+        {
+            bw.Write(IM_GetIgnoringList);
+        }
 
         public void SaveProfile(ProfileReceivedEventArgs e)
         {
@@ -329,12 +340,29 @@ namespace InstantMessenger
                             int PrivacyListCount = br.ReadInt32();
                             switch(PrivacyListType)
                             { 
-                                case "Seeing":                    
+                                case "Seeing":
+                                    SeeingList.Clear();
                                     for (int i = 0; i < PrivacyListCount; i++)
                                       {
                                       SeeingList.Add(new Privacy_record { Id = br.ReadInt32(), Id_user = br.ReadInt32(), Id_contact = br.ReadInt32() });
                                       }
                                     OnPrivacyListReceived(new PrivacyListReceivedEventArgs(PrivacyListType, SeeingList));
+                                    break;
+                                case "Unseeing":
+                                    UnseeingList.Clear();
+                                    for (int i = 0; i < PrivacyListCount; i++)
+                                    {
+                                        UnseeingList.Add(new Privacy_record { Id = br.ReadInt32(), Id_user = br.ReadInt32(), Id_contact = br.ReadInt32() });
+                                    }
+                                    OnPrivacyListReceived(new PrivacyListReceivedEventArgs(PrivacyListType, UnseeingList));
+                                    break;
+                                case "Ignoring":
+                                    IgnoringList.Clear();
+                                    for (int i = 0; i < PrivacyListCount; i++)
+                                    {
+                                        IgnoringList.Add(new Privacy_record { Id = br.ReadInt32(), Id_user = br.ReadInt32(), Id_contact = br.ReadInt32() });
+                                    }
+                                    OnPrivacyListReceived(new PrivacyListReceivedEventArgs(PrivacyListType, IgnoringList));
                                     break;
 
                             }
@@ -374,6 +402,9 @@ namespace InstantMessenger
         public const byte IM_GetSeeingList = 21; //Get list of Seeing
         public const byte IM_SetPrivacyList = 22;//Set list of Seeing
         public const byte IM_AddPrivacy = 23;//Add entry to one of privacy lists
+        public const byte IM_DeletePrivacy = 24;//Delete entry from one of privacy lists
+        public const byte IM_GetUnseeingList = 25;//Get list of Unseeing
+        public const byte IM_GetIgnoringList = 26;//Get list of Ignoring
 
         public static bool ValidateCert(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {

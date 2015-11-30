@@ -39,6 +39,46 @@ namespace InstantMessenger {
     /// </summary>
     public partial class Ignored : System.Windows.Window, System.Windows.Markup.IComponentConnector {
         
+        
+        #line 6 "..\..\Ignored.xaml"
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal System.Windows.Controls.ListBox lbx_IgnoringList;
+        
+        #line default
+        #line hidden
+        
+        
+        #line 9 "..\..\Ignored.xaml"
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal System.Windows.Controls.ComboBox cbx_DeleteIgnoring;
+        
+        #line default
+        #line hidden
+        
+        
+        #line 10 "..\..\Ignored.xaml"
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal System.Windows.Controls.ComboBox cbx_AddIgnoring;
+        
+        #line default
+        #line hidden
+        
+        
+        #line 11 "..\..\Ignored.xaml"
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal System.Windows.Controls.Button btn_DeleteIgnoring;
+        
+        #line default
+        #line hidden
+        
+        
+        #line 12 "..\..\Ignored.xaml"
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal System.Windows.Controls.Button btn_AddIgnoring;
+        
+        #line default
+        #line hidden
+        
         private bool _contentLoaded;
         
         /// <summary>
@@ -67,6 +107,56 @@ namespace InstantMessenger {
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
         void System.Windows.Markup.IComponentConnector.Connect(int connectionId, object target) {
+            switch (connectionId)
+            {
+            case 1:
+            this.lbx_IgnoringList = ((System.Windows.Controls.ListBox)(target));
+            return;
+            case 2:
+            
+            #line 8 "..\..\Ignored.xaml"
+            ((System.Windows.Controls.Button)(target)).Click += new System.Windows.RoutedEventHandler(this.Button_Click);
+            
+            #line default
+            #line hidden
+            return;
+            case 3:
+            this.cbx_DeleteIgnoring = ((System.Windows.Controls.ComboBox)(target));
+            
+            #line 9 "..\..\Ignored.xaml"
+            this.cbx_DeleteIgnoring.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(this.cbx_DeleteIgnoring_SelectionChanged);
+            
+            #line default
+            #line hidden
+            return;
+            case 4:
+            this.cbx_AddIgnoring = ((System.Windows.Controls.ComboBox)(target));
+            
+            #line 10 "..\..\Ignored.xaml"
+            this.cbx_AddIgnoring.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(this.cbx_AddIgnoring_SelectionChanged);
+            
+            #line default
+            #line hidden
+            return;
+            case 5:
+            this.btn_DeleteIgnoring = ((System.Windows.Controls.Button)(target));
+            
+            #line 11 "..\..\Ignored.xaml"
+            this.btn_DeleteIgnoring.Click += new System.Windows.RoutedEventHandler(this.btn_DeleteIgnoring_Click);
+            
+            #line default
+            #line hidden
+            return;
+            case 6:
+            this.btn_AddIgnoring = ((System.Windows.Controls.Button)(target));
+            
+            #line 12 "..\..\Ignored.xaml"
+            this.btn_AddIgnoring.Click += new System.Windows.RoutedEventHandler(this.btn_AddIgnoring_Click);
+            
+            #line default
+            #line hidden
+            return;
+            }
             this._contentLoaded = true;
         }
     }
