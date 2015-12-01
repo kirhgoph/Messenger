@@ -317,6 +317,25 @@ namespace InstantMessenger
                 {
                     trv_ContactList.Items.Add(cnt.Name_for_user);
                 });
+                trv_Statuses.Items.Clear();
+                ContactList.ForEach(delegate(Contact cnt)
+                {
+                    switch (cnt.status / 10)
+                    {
+                        case 0:
+                            trv_Statuses.Items.Add("Offline");
+                            break;
+                        case 1:
+                            trv_Statuses.Items.Add("Online");
+                            break;
+                        case 2:
+                            trv_Statuses.Items.Add("Busy");
+                            break;
+                        case 3:
+                            trv_Statuses.Items.Add("DnD");
+                            break;
+                    }
+                });
             }));
         }
 

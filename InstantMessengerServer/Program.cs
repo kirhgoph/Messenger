@@ -250,6 +250,15 @@ namespace InstantMessengerServer
         {
             return Users.Find(p => p.Login == Login);
         }
+        public int GetImaginaryStatus(int Id_contact, int Id_user)
+        {
+            int realstatus = Users.Find(p => p.Id == Id_contact).Status;
+            if (realstatus == 0) return 0;
+            if (Ignoring.Find(p=> (p.Id_contact==Id_contact) &&(p.Id_user==Id_user))!=null) return 0;
+            if (realstatus % 10 == 1) return realstatus;
+            if (realstatus % 10 == 2) if (Seeing.Find(p => (p.Id_contact == Id_user) && (p.Id_user == Id_contact)) != null) return realstatus; else return 0;
+            return 0;
+        }
         static void Main(string[] args)
         {
             Program p = new Program();
