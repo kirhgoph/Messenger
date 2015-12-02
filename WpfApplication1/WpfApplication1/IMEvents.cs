@@ -46,10 +46,12 @@ namespace InstantMessenger
     public class AddContactAddEventArgs : EventArgs
     {
         public string Login { get; set; }
+        public string NameForUser { get; set; }
 
-        public AddContactAddEventArgs(string Login)
+        public AddContactAddEventArgs(string Login, string NameForUser)
         {
             this.Login = Login;
+            this.NameForUser = NameForUser;
         }
     }
     public class AddContactSearchEventArgs : EventArgs
