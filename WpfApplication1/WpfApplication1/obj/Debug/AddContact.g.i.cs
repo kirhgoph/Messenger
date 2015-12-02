@@ -71,6 +71,22 @@ namespace InstantMessenger {
         #line default
         #line hidden
         
+        
+        #line 12 "..\..\AddContact.xaml"
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal System.Windows.Controls.Label lbl_NameForUser;
+        
+        #line default
+        #line hidden
+        
+        
+        #line 13 "..\..\AddContact.xaml"
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal System.Windows.Controls.TextBox tbx_NameForUser;
+        
+        #line default
+        #line hidden
+        
         private bool _contentLoaded;
         
         /// <summary>
@@ -144,6 +160,12 @@ namespace InstantMessenger {
             
             #line default
             #line hidden
+            return;
+            case 6:
+            this.lbl_NameForUser = ((System.Windows.Controls.Label)(target));
+            return;
+            case 7:
+            this.tbx_NameForUser = ((System.Windows.Controls.TextBox)(target));
             return;
             }
             this._contentLoaded = true;

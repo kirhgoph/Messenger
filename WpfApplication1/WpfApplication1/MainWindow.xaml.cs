@@ -246,6 +246,8 @@ namespace InstantMessenger
             if ((txt_Password.Text!="") && (txt_Login.Text!=""))
             {
             im.Login(txt_Login.Text, txt_Password.Text);
+            txt_Login.Text = "";
+            txt_Password.Text = "";
             }
             else
                 MessageBox.Show("Enter login and password!");
@@ -260,10 +262,12 @@ namespace InstantMessenger
         }
         private void cBox_Status_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (im._conn==true)
             im.ChangeStatus(cBox_Status.SelectedIndex);
         }
         private void cBox_Privacy_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (im._conn == true)
             im.ChangePrivacy(cBox_Privacy.SelectedIndex);
         }
         private void btn_ContactAdd_Click(object sender, RoutedEventArgs e)
@@ -275,6 +279,7 @@ namespace InstantMessenger
                 AddCont.registerHandler();
                 AddCont.AddcontactSearch += new AddContactSearchEventHandler(im_AddcontactSearch);
                 AddCont.AddcontactAdd += new AddContactAddEventHandler(im_AddcontactAdd);
+                AddCont.lbl_NameForUser.Content = "";
                 AddCont.Show();
             }));
         }

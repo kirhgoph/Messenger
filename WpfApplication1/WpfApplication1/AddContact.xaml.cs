@@ -45,6 +45,7 @@ namespace InstantMessenger
         {
             Dispatcher.BeginInvoke(new ThreadStart(delegate
             {
+                lbl_NameForUser.Content = e.result;
                 lbx_SearchResult.Items.Add(e.result);
             }));
         }
@@ -80,7 +81,7 @@ namespace InstantMessenger
 
         private void btn_AddcontactOk_Click(object sender, RoutedEventArgs e)
         {
-            OnAddcontactAdd(new AddContactAddEventArgs(lbx_SearchResult.SelectedItem.ToString()));
+            OnAddcontactAdd(new AddContactAddEventArgs(lbx_SearchResult.SelectedItem.ToString(), tbx_NameForUser.Text));
             this.Close();
         }
     }

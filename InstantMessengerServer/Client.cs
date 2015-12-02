@@ -198,7 +198,7 @@ namespace InstantMessengerServer
                         prog.Contacts.FindAll(p => p.Id_contact == Logging.Id).ForEach(delegate(Contact cnt)
                         {
                             User usr = prog.Users.Find(p => p.Id == cnt.Id_user);
-                            if (usr != null)
+                            if (usr.Connection != null)
                             {
                                 usr.Connection.bw.Write(IM_RefreshContactList);
                                 usr.Connection.RefreshContactList();
@@ -212,7 +212,7 @@ namespace InstantMessengerServer
                         prog.Contacts.FindAll(p=> p.Id_contact==Logging.Id).ForEach(delegate(Contact cnt)
                         {
                             User usr = prog.Users.Find(p => p.Id == cnt.Id_user);
-                            if (usr != null)
+                            if (usr.Connection != null)
                             {
                                 usr.Connection.bw.Write(IM_RefreshContactList);
                                 usr.Connection.RefreshContactList();
@@ -233,7 +233,8 @@ namespace InstantMessengerServer
                     else if (type == IM_AddcontactAdd)
                     {
                         String Login = br.ReadString();
-                        Contact cont = new Contact { Id = prog.Contacts.Count, Id_user = Logging.Id, Id_contact = prog.FindLogin(Login).Id, Id_grupp = 0, Name_for_user = Login };
+                        String NameForUser = br.ReadString();
+                        Contact cont = new Contact { Id = prog.Contacts.Count, Id_user = Logging.Id, Id_contact = prog.FindLogin(Login).Id, Id_grupp = 0, Name_for_user = NameForUser };
                         prog.SaveContacts(cont);
                         prog.Contacts.Add(cont);
                         bw.Write(IM_RefreshContactList);
@@ -310,6 +311,15 @@ namespace InstantMessengerServer
                                 break;
                         }
                         prog.AddPrivacy(privacyType, prv);
+                        prog.Contacts.FindAll(p => p.Id_contact == Logging.Id).ForEach(delegate(Contact cnt)
+                        {
+                            User usr = prog.Users.Find(p => p.Id == cnt.Id_user);
+                            if (usr.Connection != null)
+                            {
+                                usr.Connection.bw.Write(IM_RefreshContactList);
+                                usr.Connection.RefreshContactList();
+                            }
+                        });
                     }
                     else if (type == IM_DeletePrivacy)
                     {
@@ -332,6 +342,15 @@ namespace InstantMessengerServer
                                 break;
                         }
                         prog.DeletePrivacy(privacyType, prv);
+                        prog.Contacts.FindAll(p => p.Id_contact == Logging.Id).ForEach(delegate(Contact cnt)
+                        {
+                            User usr = prog.Users.Find(p => p.Id == cnt.Id_user);
+                            if (usr.Connection != null)
+                            {
+                                usr.Connection.bw.Write(IM_RefreshContactList);
+                                usr.Connection.RefreshContactList();
+                            }
+                        });
                     }
                 }
             }

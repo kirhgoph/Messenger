@@ -16,7 +16,7 @@ namespace InstantMessenger
     {
         public MainWindow ParentWindow;
         Thread tcpThread;      // Receiver
-        bool _conn = false;    // Is connected/connecting?
+        public bool _conn = false;    // Is connected/connecting?
         bool _logged = false;  // Is logged in?
         string _user;          // Username
         string _pass;          // Password
@@ -119,6 +119,7 @@ namespace InstantMessenger
         {
             bw.Write(IM_AddcontactAdd);
             bw.Write(e.Login);
+            bw.Write(e.NameForUser);
         }
    
 
@@ -283,13 +284,13 @@ namespace InstantMessenger
             catch { }
             try
             {
-            OnDisconnected();
+                _conn = false;
             }
             catch { }
             try
             {
-            _conn = false;
-                            }
+            OnDisconnected();
+            }
             catch { }
         }
         void Receiver()  // Receive all incoming packets.

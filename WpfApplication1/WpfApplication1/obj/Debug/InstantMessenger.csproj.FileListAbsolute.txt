@@ -51,7 +51,6 @@ C:\Messenger\Messenger\Messenger\WpfApplication1\WpfApplication1\obj\Debug\Insta
 C:\Messenger\WpfApplication1\WpfApplication1\bin\Debug\WpfApplication1.exe.config
 C:\Messenger\WpfApplication1\WpfApplication1\bin\Debug\WpfApplication1.exe
 C:\Messenger\WpfApplication1\WpfApplication1\bin\Debug\WpfApplication1.pdb
-C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\InstantMessenger.csprojResolveAssemblyReference.cache
 C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\DeleteContact.baml
 C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\MainWindow.baml
 C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\AddContact.baml
