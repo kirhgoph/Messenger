@@ -72,3 +72,4 @@ C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\WpfApplication1.exe
 C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\WpfApplication1.pdb
 C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\Ignoring.baml
 C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\Ignoring.g.cs
+C:\Messenger\WpfApplication1\WpfApplication1\obj\Debug\InstantMessenger.csprojResolveAssemblyReference.cache

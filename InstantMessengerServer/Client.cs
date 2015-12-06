@@ -134,6 +134,7 @@ namespace InstantMessengerServer
             try
             {
                 RefreshContactList();
+                RefreshMessagesList();
                 while (client.Client.Connected)  // While we are connected.
                 {
                     byte type = br.ReadByte();  // Get incoming packet type.
@@ -183,6 +184,7 @@ namespace InstantMessengerServer
                         bw.Write(Logging.First_Name);
                         bw.Write(Logging.Last_name);
                         bw.Write(Logging.Birth_date.ToString());
+                        bw.Write(1);
                     }
                     else if (type == IM_SaveProfile)
                     {
@@ -352,6 +354,16 @@ namespace InstantMessengerServer
                             }
                         });
                     }
+                    else if (type == IM_GetOtherProfile)
+                    {
+                        String profileName = br.ReadString();
+                        bw.Write(IM_SetProfile);
+                        User Profile = prog.Users.Find(p=> p.Id==(prog.Contacts.Find(q=> (q.Id_user==Logging.Id) && (q.Name_for_user==profileName)).Id_contact));
+                        bw.Write(Logging.First_Name);
+                        bw.Write(Logging.Last_name);
+                        bw.Write(Logging.Birth_date.ToString());
+                        bw.Write(0);
+                    }
                 }
             }
             
@@ -373,6 +385,21 @@ namespace InstantMessengerServer
                 bw.Write(cnt.Id_grupp);
                 bw.Write(cnt.Name_for_user);
                 bw.Write(prog.GetImaginaryStatus(cnt.Id_contact,cnt.Id_user));
+            });
+        }
+        public void RefreshMessagesList()
+        {
+            List<Message> MessageList_from = prog.Messages.FindAll(p => (p.Id_from == Logging.Id));
+            List<Message> MessageList_whom = prog.Messages.FindAll(p => (p.Id_from == Logging.Id));
+            bw.Write(MessageList_from.Count+MessageList_from.Count);
+            MessageList_from.ForEach(delegate(Message mes)
+            {
+                bw.Write(mes.Id);
+                bw.Write(mes.Id_from);
+                bw.Write(mes.Id_whom);
+                bw.Write(mes.Magic_pointer);
+                bw.Write(mes.Mess_text);
+                bw.Write(mes.Mess_date);
             });
         }
 
@@ -404,5 +431,6 @@ namespace InstantMessengerServer
         public const byte IM_DeletePrivacy = 24;//Delete entry from one of privacy lists
         public const byte IM_GetUnseeingList = 25;//Get list of Unseeing
         public const byte IM_GetIgnoringList = 26;//Get list of Ignoring
+        public const byte IM_GetOtherProfile = 27;//Get profile of other user
     }
 }

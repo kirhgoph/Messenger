@@ -26,6 +26,7 @@ namespace InstantMessenger
         public int Port { get { return 2000; } }
 
         public List<Contact> ContactList = new List<Contact>();
+        public List<Message> Messages = new List<Message>();
         public List<Privacy_record> SeeingList = new List<Privacy_record>();
         public List<Privacy_record> UnseeingList = new List<Privacy_record>();
         public List<Privacy_record> IgnoringList = new List<Privacy_record>();
@@ -62,6 +63,10 @@ namespace InstantMessenger
         public void GetProfile()
         {
              bw.Write(IM_GetProfile);
+        }
+        public void GetOtherProfile()
+        {
+            bw.Write(IM_GetOtherProfile);
         }
         public void DeleteContact(string str)
         {
@@ -193,6 +198,16 @@ namespace InstantMessenger
         BinaryReader br;
         BinaryWriter bw;
 
+        void RefreshMessagesList()
+        {
+            Messages = new List<Message>();
+            int SizeOfMessageList = br.ReadInt32();
+            for (int i = 0; i < SizeOfMessageList; i++)
+            {
+                Message mes = new Message { Id = br.ReadInt32(), Id_from = br.ReadInt32(), Id_whom = br.ReadInt32(), Magic_pointer = br.ReadInt32(), Mess_text = br.ReadString(), Mess_date = br.ReadString() };
+                Messages.Add(mes);
+            }
+        }
         void RefreshContactList()
         {
             ContactList = new List<Contact>();
@@ -300,6 +315,7 @@ namespace InstantMessenger
             try
             {
                     RefreshContactList();
+                    RefreshMessagesList();
                     while (client.Connected)  // While we are connected.
                     {
                         byte type = br.ReadByte();  // Get incoming packet type.
@@ -321,7 +337,8 @@ namespace InstantMessenger
                             String FirstName = br.ReadString();
                             String LastName = br.ReadString();
                             String BirthDate = br.ReadString();
-                            OnProfileReceived(new ProfileReceivedEventArgs(FirstName, LastName, BirthDate));
+                            int Own = br.ReadInt32();
+                            OnProfileReceived(new ProfileReceivedEventArgs(FirstName, LastName, BirthDate,Own));
                         }
                         if (type == IM_AddcontactResult)
                         {
@@ -406,6 +423,7 @@ namespace InstantMessenger
         public const byte IM_DeletePrivacy = 24;//Delete entry from one of privacy lists
         public const byte IM_GetUnseeingList = 25;//Get list of Unseeing
         public const byte IM_GetIgnoringList = 26;//Get list of Ignoring
+        public const byte IM_GetOtherProfile = 27;//Get profile of other user
 
         public static bool ValidateCert(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
@@ -418,6 +436,15 @@ namespace InstantMessenger
         }
     }
 
+    public class Message
+    {
+        public int Id { get; set; }
+        public int Id_from { get; set; }
+        public int Id_whom { get; set; }
+        public int Magic_pointer { get; set; }
+        public String Mess_text { get; set; }
+        public String Mess_date { get; set; }
+    }
     public class Privacy_record
     {
         public int Id { get; set; }

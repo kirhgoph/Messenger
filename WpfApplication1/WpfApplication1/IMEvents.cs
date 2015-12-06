@@ -77,12 +77,14 @@ namespace InstantMessenger
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string BirthDate { get; set; }
+        public int Own { get; set; }
 
-            public ProfileReceivedEventArgs(string FirstName, string LastName,string BirthDate)
+            public ProfileReceivedEventArgs(string FirstName, string LastName,string BirthDate, int Own)
         {
             this.FirstName = FirstName;
             this.LastName = LastName;
             this.BirthDate= BirthDate;
+            this.Own = Own;
         }
     }
     public class PrivacyListReceivedEventArgs : EventArgs

@@ -280,6 +280,7 @@ namespace InstantMessengerServer
         public const int State_OK = 0;
         public const int State_TCPErr = 1;
         public const int State_SQLErr = 2;
+        public List<Message> Messages = new List<Message>();
         public List<Privacy_record> Seeing = new List<Privacy_record>();
         public List<Privacy_record> Unseeing = new List<Privacy_record>();
         public List<Privacy_record> Ignoring = new List<Privacy_record>();
@@ -347,6 +348,15 @@ namespace InstantMessengerServer
             }
         }
 
+    }
+    public class Message
+    {
+        public int Id { get; set; }
+        public int Id_from { get; set; }
+        public int Id_whom { get; set; }
+        public int Magic_pointer { get; set; }
+        public String Mess_text { get; set; }
+        public String Mess_date { get; set; }
     }
     public class Privacy_record
     {

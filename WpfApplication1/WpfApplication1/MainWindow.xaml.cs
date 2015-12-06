@@ -146,6 +146,7 @@ namespace InstantMessenger
             Dispatcher.BeginInvoke(new ThreadStart(delegate
             {
                 Profile prof = new Profile();
+                if (e.Own == 0) prof.btn_SaveProfile.IsEnabled = false;
                 prof.dpckr_Profile_BirthDate.Text = e.BirthDate;
                 prof.tbx_Profile_FirstName.Text = e.FirstName;
                 prof.tbx_Profile_LastName.Text = e.LastName;
@@ -357,6 +358,16 @@ namespace InstantMessenger
         private void btn_Ignored_Click(object sender, RoutedEventArgs e)
         {
             im.GetIgnoringList();
+        }
+
+        private void btn_OtherProfile_Click(object sender, RoutedEventArgs e)
+        {
+            im.GetOtherProfile();
+        }
+
+        private void trv_ContactList_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            im.ContactList.Find(p=> p.Name_for_user==e.NewValue);
         }
 
 

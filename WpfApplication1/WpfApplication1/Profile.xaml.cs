@@ -33,7 +33,7 @@ namespace InstantMessenger
 
         private void btn_SaveProfile_Click(object sender, RoutedEventArgs e)
         {
-            OnProfileSave(new ProfileReceivedEventArgs(tbx_Profile_FirstName.Text,tbx_Profile_LastName.Text,dpckr_Profile_BirthDate.ToString()));
+            OnProfileSave(new ProfileReceivedEventArgs(tbx_Profile_FirstName.Text,tbx_Profile_LastName.Text,dpckr_Profile_BirthDate.ToString(),1));
             this.Close();
         }
         private void tbx_Profile_FirstName_TextChanged(object sender, TextChangedEventArgs e)
