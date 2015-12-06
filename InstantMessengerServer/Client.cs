@@ -139,44 +139,22 @@ namespace InstantMessengerServer
                 {
                     byte type = br.ReadByte();  // Get incoming packet type.
 
-                    if (type == IM_IsAvailable)
+                    if (type == IM_Send)
                     {
-                        string who = br.ReadString();
-
-                        bw.Write(IM_IsAvailable);
-                        bw.Write(who);
-
-                        User info = prog.Users.Find(p => p.Login == who);
-                        if (info != null)
-                        {
-                            if (info.Status == 1)
-                                bw.Write(true);   // Available
-                            else
-                                bw.Write(false);  // Unavailable
-                        }
-                        else
-                            bw.Write(false);      // Unavailable
-                        bw.Flush();
-                    }
-                    else if (type == IM_Send)
-                    {
-                        string to = br.ReadString();
-                        string msg = br.ReadString();
-
-                        User recipient = prog.Users.Find(p => p.Login == to); ;
-                        if (recipient != null)
-                        {
-                            // Is recipient logged in?
-                            if (recipient.Status != 0)
-                            {
+                        string text = br.ReadString();
+                        int to = br.ReadInt32();
+                        int Magic_pointer =br.ReadInt32();
+                        string mess_date = br.ReadString();
+                        Message mes = new Message() { Id = prog.Messages.Count, Id_from = Logging.Id, Id_whom = to, Mess_text = text, Mess_date = mess_date };
+                        User recipient = prog.Users.Find(p => p.Id == to); ;
                                 // Write received packet to recipient
                                 recipient.Connection.bw.Write(IM_Received);
-                                recipient.Connection.bw.Write(Logging.Login);  // From
-                                recipient.Connection.bw.Write(msg);
+                                recipient.Connection.bw.Write(Logging.Id);  // From
+                                recipient.Connection.bw.Write(text);
+                                recipient.Connection.bw.Write(Magic_pointer);
+                                recipient.Connection.bw.Write(mess_date);
                                 recipient.Connection.bw.Flush();
                                 Console.WriteLine("[{0}] ({1} -> {2}) Message sent!", DateTime.Now, Logging.Login, recipient.Login);
-                            }
-                        }
                     }
                     else if (type == IM_GetProfile)
                     {
@@ -359,9 +337,9 @@ namespace InstantMessengerServer
                         String profileName = br.ReadString();
                         bw.Write(IM_SetProfile);
                         User Profile = prog.Users.Find(p=> p.Id==(prog.Contacts.Find(q=> (q.Id_user==Logging.Id) && (q.Name_for_user==profileName)).Id_contact));
-                        bw.Write(Logging.First_Name);
-                        bw.Write(Logging.Last_name);
-                        bw.Write(Logging.Birth_date.ToString());
+                        bw.Write(Profile.First_Name);
+                        bw.Write(Profile.Last_name);
+                        bw.Write(Profile.Birth_date.ToString());
                         bw.Write(0);
                     }
                 }
@@ -412,7 +390,6 @@ namespace InstantMessengerServer
         public const byte IM_Exists = 5;       // Already exists
         public const byte IM_NoExists = 6;     // Doesn't exists
         public const byte IM_WrongPass = 7;    // Wrong password
-        public const byte IM_IsAvailable = 8;  // Is user available?
         public const byte IM_Send = 9;         // Send message
         public const byte IM_Received = 10;    // Message received
         public const byte IM_GetProfile = 11;  // Get profile details

@@ -25,22 +25,17 @@ namespace InstantMessenger
     }
     public class IMReceivedEventArgs : EventArgs
     {
-        string user;
-        string msg;
+        public int user;
+        public string msg;
+        public int Magic_pointer;
+        public string mess_date;
 
-        public IMReceivedEventArgs(string user, string msg)
+        public IMReceivedEventArgs(int user, string msg, int Magic_pointer,string mess_date)
         {
             this.user = user;
             this.msg = msg;
-        }
-
-        public string From
-        {
-            get { return user; }
-        }
-        public string Message
-        {
-            get { return msg; }
+            this.Magic_pointer = Magic_pointer;
+            this.mess_date = mess_date;
         }
     }
     public class AddContactAddEventArgs : EventArgs

@@ -35,6 +35,7 @@ namespace InstantMessenger
             im.Disconnected += new EventHandler(im_Disconnected);
             im.ProfileReceived += new ProfileReceivedEventHandler(im_ProfileReceived);
             im.PrivacyListReceived += new PrivacyListReceivedEventHandler(im_PrivacyListReceived);
+            im.MessageReceived += new IMReceivedEventHandler(im_MessageReceived);
         }
         void im_AddcontactAdd(object sender, AddContactAddEventArgs e)
         {
@@ -232,6 +233,11 @@ namespace InstantMessenger
                     break;
             }
         }
+        void im_MessageReceived(object sender, IMReceivedEventArgs e)
+        {
+            Message mes = new Message(){Id=-1,Id_from=e.user,Mess_text=e.msg,Magic_pointer=e.Magic_pointer,Mess_date=e.mess_date};
+            im.Messages.Add(mes);
+        }
         void im_ProfileSave(object sender, ProfileReceivedEventArgs e)
         {
             im.SaveProfile(e);
@@ -367,7 +373,27 @@ namespace InstantMessenger
 
         private void trv_ContactList_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            im.ContactList.Find(p=> p.Name_for_user==e.NewValue);
+            if (e.NewValue != null)
+            {
+                Contact recipient = im.ContactList.Find(p => p.Name_for_user == e.NewValue);
+                btn_OtherProfile.IsEnabled = true;
+                im.Messages.FindAll(p => (p.Id_from == recipient.Id_user) || (p.Id_whom == recipient.Id_user)).ForEach(delegate(Message msg)
+                {
+                    if (msg.Id_from == recipient.Id_user)
+                        txb_History.Text = txb_History.Text + "Me (" + msg.Mess_date + ")\n" + msg.Mess_text;
+                    else txb_History.Text = txb_History.Text + recipient.Name_for_user + " (" + msg.Mess_date + ")\n" + msg.Mess_text;
+                });
+            }
+        }
+
+        private void txb_Message_GotFocus(object sender, RoutedEventArgs e)
+        {
+            txb_Message.Text = "";
+        }
+
+        private void btn_Send_Click(object sender, RoutedEventArgs e)
+        {
+            im.SendMessage(txb_Message.Text, trv_ContactList.SelectedItem.ToString(),0);
         }
 
 

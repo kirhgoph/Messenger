@@ -25,6 +25,8 @@
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="300" Margin="184,20,0,-1" VerticalAlignment="Top" Width="335" Grid.RowSpan="2">
             <Button x:Name="btn_OtherProfile" Content="Profile" HorizontalAlignment="Left" Height="20" Margin="255,-1,0,279" VerticalAlignment="Bottom" Width="50" IsEnabled="False" Click="btn_OtherProfile_Click"/>
         </Border>
+        <TextBlock x:Name="txb_History" TextWrapping="Wrap" Margin="190,43,2,0"/>
+        <Button x:Name="btn_Send" Content="Send" Margin="470,25,1,52" Grid.Row="1" Click="btn_Send_Click"/>
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="2" Margin="0,41,0,0" VerticalAlignment="Top" Width="517"/>
         <TextBox x:Name="txt_Login" HorizontalAlignment="Right" Height="20" Margin="0,0,390,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85"  FontFamily="Times New Roman" FontSize="10"/>
         <Label Content="Login:" HorizontalAlignment="Left" Height="21" VerticalAlignment="Top" Width="37" FontFamily="Times New Roman" FontSize="10"/>
@@ -33,7 +35,7 @@
         <Button x:Name="btn_LogIn" Content="Log In" HorizontalAlignment="Left" Height="20" Margin="266,0,0,0" VerticalAlignment="Top" Width="59" FontFamily="Times New Roman" FontSize="10" Click="LogIn_Click" Visibility="Visible"/>
         <Button x:Name="btn_LogOut" Content="Log Out" HorizontalAlignment="Left" Height="20" Margin="266,0,0,0" VerticalAlignment="Top" Width="59" FontFamily="Times New Roman" FontSize="10" IsEnabled="False" Visibility="Hidden" Click="btn_LogOut_Click"/>
         <Border BorderBrush="Black" BorderThickness="1" Height="2" Margin="184,18,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="334" Grid.Row="1"/>
-        <TextBox HorizontalAlignment="Left" Height="84" Margin="185,20,0,0" TextWrapping="Wrap" Text="Type your message here:" VerticalAlignment="Top" Width="275"  FontFamily="Times New Roman" FontSize="10" Grid.Row="1"/>
+        <TextBox x:Name="txb_Message" HorizontalAlignment="Left" Height="84" Margin="185,20,0,0" TextWrapping="Wrap" Text="Type your message here:" VerticalAlignment="Top" Width="280"  FontFamily="Times New Roman" FontSize="10" Grid.Row="1" GotFocus="txb_Message_GotFocus"/>
         <Label Content="Contacts:" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="47" FontFamily="Times New Roman" FontSize="10" Margin="1,21,0,0"/>
         <Button x:Name="btn_Registration" Content="Registration" HorizontalAlignment="Left" Height="20" Margin="384,0,0,0" VerticalAlignment="Top" Width="135" FontFamily="Times New Roman" FontSize="10" ScrollViewer.VerticalScrollBarVisibility="Hidden" Click="Registration_Click"/>
         <Button x:Name="btn_ContactAdd" Content="Add new " HorizontalAlignment="Left" Height="20" Margin="53,21,0,0" VerticalAlignment="Top" Width="47" FontFamily="Times New Roman" FontSize="10" IsEnabled="False" Click="btn_ContactAdd_Click"/>

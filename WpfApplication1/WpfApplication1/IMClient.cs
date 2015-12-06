@@ -67,6 +67,7 @@ namespace InstantMessenger
         public void GetOtherProfile()
         {
             bw.Write(IM_GetOtherProfile);
+            bw.Write(ParentWindow.trv_ContactList.SelectedItem.ToString());
         }
         public void DeleteContact(string str)
         {
@@ -125,6 +126,14 @@ namespace InstantMessenger
             bw.Write(IM_AddcontactAdd);
             bw.Write(e.Login);
             bw.Write(e.NameForUser);
+        }
+        public void SendMessage(String text, String to, int Magic_Pointer)
+        {
+            bw.Write(IM_Send);
+            bw.Write(text);
+            bw.Write(ContactList.Find(p=>p.Name_for_user==to).Id_contact);
+            bw.Write(Magic_Pointer);
+            bw.Write(DateTime.Now.ToString());
         }
    
 
@@ -328,11 +337,13 @@ namespace InstantMessenger
                         //}
                         if (type == IM_Received)
                         {
-                            string from = br.ReadString();
+                            int from = br.ReadInt32();
                             string msg = br.ReadString();
-                            OnMessageReceived(new IMReceivedEventArgs(from, msg));
+                            int mp = br.ReadInt32();
+                            string mess_date = br.ReadString();
+                            OnMessageReceived(new IMReceivedEventArgs(from, msg, mp, mess_date));
                         }
-                        if (type == IM_SetProfile)
+                        else if (type == IM_SetProfile)
                         {
                             String FirstName = br.ReadString();
                             String LastName = br.ReadString();
@@ -340,7 +351,7 @@ namespace InstantMessenger
                             int Own = br.ReadInt32();
                             OnProfileReceived(new ProfileReceivedEventArgs(FirstName, LastName, BirthDate,Own));
                         }
-                        if (type == IM_AddcontactResult)
+                        else if (type == IM_AddcontactResult)
                         {
                             if (br.ReadInt32() != 0)
                             {
@@ -348,11 +359,11 @@ namespace InstantMessenger
                             }
                             //OnAddcontactResult(new AddContactResultEventArgs(null));
                         }
-                        if (type == IM_RefreshContactList)
+                        else if (type == IM_RefreshContactList)
                         {
                             RefreshContactList();
                         }
-                        if (type == IM_SetPrivacyList)
+                        else if (type == IM_SetPrivacyList)
                         {
                             string PrivacyListType = br.ReadString();
                             int PrivacyListCount = br.ReadInt32();
@@ -404,7 +415,6 @@ namespace InstantMessenger
         public const byte IM_Exists = 5;       // Already exists
         public const byte IM_NoExists = 6;     // Doesn't exist
         public const byte IM_WrongPass = 7;    // Wrong password
-        public const byte IM_IsAvailable = 8;  // Is user available?
         public const byte IM_Send = 9;         // Send message
         public const byte IM_Received = 10;    // Message received
         public const byte IM_GetProfile = 11;  // Get profile details

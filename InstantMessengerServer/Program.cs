@@ -37,6 +37,25 @@ namespace InstantMessengerServer
             else
                 return -1;
         }
+        public void LoadMessages()
+        {
+            SqlCommand myCommand = new SqlCommand("SELECT *  FROM [Messenger].[dbo].[Mess];", SQLConnection);
+            SqlDataReader myReader = null;
+            myReader = myCommand.ExecuteReader();
+            try
+            {
+                while (myReader.Read())
+                {
+                    Message mes = new Message() { Id = SafeGetInt(myReader, 0), Id_from = SafeGetInt(myReader, 1), Id_whom = SafeGetInt(myReader, 2), Magic_pointer = SafeGetInt(myReader, 3), Mess_text = SafeGetString(myReader, 4), Mess_date = SafeGetDate(myReader, 5).ToString()};
+                    Messages.Add(mes);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            myReader.Close();
+        }
         public void LoadUsers()
         {
             SqlCommand myCommand = new SqlCommand("SELECT *  FROM [Messenger].[dbo].[User];", SQLConnection);
@@ -312,6 +331,7 @@ namespace InstantMessengerServer
             {
                 LoadUsers();
                 LoadContacts();
+                LoadMessages();
                 LoadPrivacy("Seeing");
                 LoadPrivacy("Unseeing");
                 LoadPrivacy("Ignoring");
