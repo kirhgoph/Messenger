@@ -25,7 +25,9 @@
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="300" Margin="184,20,0,-1" VerticalAlignment="Top" Width="335" Grid.RowSpan="2">
             <Button x:Name="btn_OtherProfile" Content="Profile" HorizontalAlignment="Left" Height="20" Margin="255,-1,0,279" VerticalAlignment="Bottom" Width="50" IsEnabled="False" Click="btn_OtherProfile_Click"/>
         </Border>
-        <TextBlock x:Name="txb_History" TextWrapping="Wrap" Margin="190,43,2,0"/>
+        <ScrollViewer x:Name="ScrollViewer" Margin="191,46,2,0">
+            <TextBlock x:Name="txb_History" TextWrapping="Wrap" Grid.RowSpan="2"/>
+        </ScrollViewer>
         <Button x:Name="btn_Send" Content="Send" Margin="470,25,1,52" Grid.Row="1" Click="btn_Send_Click"/>
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="2" Margin="0,41,0,0" VerticalAlignment="Top" Width="517"/>
         <TextBox x:Name="txt_Login" HorizontalAlignment="Right" Height="20" Margin="0,0,390,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85"  FontFamily="Times New Roman" FontSize="10"/>

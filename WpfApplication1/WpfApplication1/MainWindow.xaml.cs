@@ -392,7 +392,7 @@ namespace InstantMessenger
             Dispatcher.BeginInvoke(new ThreadStart(delegate 
             {
             txb_History.Text = "";
-            if (trv_ContactList.SelectedItem.ToString()!=null)
+            if (trv_ContactList.SelectedItem!=null)
             {
                 Contact recipient = im.ContactList.Find(p => p.Name_for_user == trv_ContactList.SelectedItem.ToString());
                 btn_OtherProfile.IsEnabled = true;
@@ -403,6 +403,7 @@ namespace InstantMessenger
                     else txb_History.Text = txb_History.Text + recipient.Name_for_user + " (" + msg.Mess_date + ")\n" + msg.Mess_text + "\n";
                 });
             }
+            ScrollViewer.ScrollToEnd();
             }));
         }
 
