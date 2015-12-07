@@ -235,8 +235,9 @@ namespace InstantMessenger
         }
         void im_MessageReceived(object sender, IMReceivedEventArgs e)
         {
-            Message mes = new Message(){Id=-1,Id_from=e.user,Mess_text=e.msg,Magic_pointer=e.Magic_pointer,Mess_date=e.mess_date};
+            Message mes = new Message(){Id=-1,Id_from=e.user,Id_whom=im.ContactList.Find(p=> p.Id>-1).Id_user,Mess_text=e.msg,Magic_pointer=e.Magic_pointer,Mess_date=e.mess_date};
             im.Messages.Add(mes);
+            refreshHistory();
         }
         void im_ProfileSave(object sender, ProfileReceivedEventArgs e)
         {
@@ -373,17 +374,36 @@ namespace InstantMessenger
 
         private void trv_ContactList_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            txb_History.Text = "";
             if (e.NewValue != null)
             {
                 Contact recipient = im.ContactList.Find(p => p.Name_for_user == e.NewValue);
                 btn_OtherProfile.IsEnabled = true;
-                im.Messages.FindAll(p => (p.Id_from == recipient.Id_user) || (p.Id_whom == recipient.Id_user)).ForEach(delegate(Message msg)
+                im.Messages.FindAll(p => (p.Id_from == recipient.Id_contact) || (p.Id_whom == recipient.Id_contact)).ForEach(delegate(Message msg)
                 {
                     if (msg.Id_from == recipient.Id_user)
-                        txb_History.Text = txb_History.Text + "Me (" + msg.Mess_date + ")\n" + msg.Mess_text;
-                    else txb_History.Text = txb_History.Text + recipient.Name_for_user + " (" + msg.Mess_date + ")\n" + msg.Mess_text;
+                        txb_History.Text = txb_History.Text + "Me (" + msg.Mess_date + ")\n" + msg.Mess_text+"\n";
+                    else txb_History.Text = txb_History.Text + recipient.Name_for_user + " (" + msg.Mess_date + ")\n" + msg.Mess_text+"\n";
                 });
             }
+        }
+        public void refreshHistory()
+        {
+            Dispatcher.BeginInvoke(new ThreadStart(delegate 
+            {
+            txb_History.Text = "";
+            if (trv_ContactList.SelectedItem.ToString()!=null)
+            {
+                Contact recipient = im.ContactList.Find(p => p.Name_for_user == trv_ContactList.SelectedItem.ToString());
+                btn_OtherProfile.IsEnabled = true;
+                im.Messages.FindAll(p => (p.Id_from == recipient.Id_contact) || (p.Id_whom == recipient.Id_contact)).ForEach(delegate(Message msg)
+                {
+                    if (msg.Id_from == recipient.Id_user)
+                        txb_History.Text = txb_History.Text + "Me (" + msg.Mess_date + ")\n" + msg.Mess_text + "\n";
+                    else txb_History.Text = txb_History.Text + recipient.Name_for_user + " (" + msg.Mess_date + ")\n" + msg.Mess_text + "\n";
+                });
+            }
+            }));
         }
 
         private void txb_Message_GotFocus(object sender, RoutedEventArgs e)

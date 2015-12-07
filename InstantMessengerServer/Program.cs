@@ -132,8 +132,8 @@ namespace InstantMessengerServer
         }
         public void SaveContacts(Contact cont)
         {
-            String com = "INSERT into [Messenger].[dbo].[Contacts] (Id,Id_user,Id_contact,ID_grupp,Name_for_user) values(" + cont.Id + "," + cont.Id_user + "," + cont.Id_contact + "," + cont.Id_grupp + "," + cont.Name_for_user + ");";
-            SqlCommand myCommand = new SqlCommand("INSERT into [Messenger].[dbo].[Contacts] (Id,Id_user,Id_contact,ID_grupp,Name_for_user) values(" + cont.Id + "," + cont.Id_user + "," + cont.Id_contact + "," + cont.Id_grupp + "," + cont.Name_for_user + ");",SQLConnection);
+            String com = "INSERT into [Messenger].[dbo].[Contacts] (Id,Id_user,Id_contact,ID_grupp,Name_for_user) values(" + cont.Id + "," + cont.Id_user + "," + cont.Id_contact + "," + cont.Id_grupp + ",'" + cont.Name_for_user + "');";
+            SqlCommand myCommand = new SqlCommand("INSERT into [Messenger].[dbo].[Contacts] (Id,Id_user,Id_contact,ID_grupp,Name_for_user) values(" + cont.Id + "," + cont.Id_user + "," + cont.Id_contact + "," + cont.Id_grupp + ",'" + cont.Name_for_user + "');",SQLConnection);
             try
             {
             myCommand.ExecuteNonQuery();

@@ -131,9 +131,14 @@ namespace InstantMessenger
         {
             bw.Write(IM_Send);
             bw.Write(text);
-            bw.Write(ContactList.Find(p=>p.Name_for_user==to).Id_contact);
+            Contact random_contact = ContactList.Find(p=>p.Id>-1);
+            int recipient_id = ContactList.Find(p=>p.Name_for_user==to).Id_contact;
+            bw.Write(recipient_id);
             bw.Write(Magic_Pointer);
-            bw.Write(DateTime.Now.ToString());
+            String now = DateTime.Now.ToString();
+            bw.Write(now);
+            Messages.Add(new Message() { Id = -1, Id_from = random_contact.Id_user, Id_whom = recipient_id,Magic_pointer=0,Mess_date=now,Mess_text=text});
+            ParentWindow.refreshHistory();
         }
    
 
