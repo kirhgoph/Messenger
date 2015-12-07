@@ -13,14 +13,170 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Runtime.InteropServices;
+
+public class FlashWindowHelper
+{
+    private IntPtr mainWindowHWnd;
+    private Application theApp;
+
+    public FlashWindowHelper(Application app)
+    {
+        this.theApp = app;
+    }
+
+    public void FlashApplicationWindow()
+    {
+        InitializeHandle();
+        Flash(this.mainWindowHWnd, 5);
+    }
+
+    public void StopFlashing()
+    {
+        InitializeHandle();
+
+        if (Win2000OrLater)
+        {
+            FLASHWINFO fi = CreateFlashInfoStruct(this.mainWindowHWnd, FLASHW_STOP, uint.MaxValue, 0);
+            FlashWindowEx(ref fi);
+        }
+    }
+
+    private void InitializeHandle()
+    {
+        if (this.mainWindowHWnd == IntPtr.Zero)
+        {
+            // Delayed creation of Main Window IntPtr as Application.Current passed in to ctor does not have the MainWindow set at that time
+            var mainWindow = this.theApp.MainWindow;
+            this.mainWindowHWnd = new System.Windows.Interop.WindowInteropHelper(mainWindow).Handle;
+        }
+    }
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool FlashWindowEx(ref FLASHWINFO pwfi);
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct FLASHWINFO
+    {
+        /// <summary>
+        /// The size of the structure in bytes.
+        /// </summary>
+        public uint cbSize;
+        /// <summary>
+        /// A Handle to the Window to be Flashed. The window can be either opened or minimized.
+        /// </summary>
+        public IntPtr hwnd;
+        /// <summary>
+        /// The Flash Status.
+        /// </summary>
+        public uint dwFlags;
+        /// <summary>
+        /// The number of times to Flash the window.
+        /// </summary>
+        public uint uCount;
+        /// <summary>
+        /// The rate at which the Window is to be flashed, in milliseconds. If Zero, the function uses the default cursor blink rate.
+        /// </summary>
+        public uint dwTimeout;
+    }
+
+    /// <summary>
+    /// Stop flashing. The system restores the window to its original stae.
+    /// </summary>
+    public const uint FLASHW_STOP = 0;
+
+    /// <summary>
+    /// Flash the window caption.
+    /// </summary>
+    public const uint FLASHW_CAPTION = 1;
+
+    /// <summary>
+    /// Flash the taskbar button.
+    /// </summary>
+    public const uint FLASHW_TRAY = 2;
+
+    /// <summary>
+    /// Flash both the window caption and taskbar button.
+    /// This is equivalent to setting the FLASHW_CAPTION | FLASHW_TRAY flags.
+    /// </summary>
+    public const uint FLASHW_ALL = 3;
+
+    /// <summary>
+    /// Flash continuously, until the FLASHW_STOP flag is set.
+    /// </summary>
+    public const uint FLASHW_TIMER = 4;
+
+    /// <summary>
+    /// Flash continuously until the window comes to the foreground.
+    /// </summary>
+    public const uint FLASHW_TIMERNOFG = 12;
+
+    /// <summary>
+    /// Flash the spacified Window (Form) until it recieves focus.
+    /// </summary>
+    /// <param name="hwnd"></param>
+    /// <returns></returns>
+    public static bool Flash(IntPtr hwnd)
+    {
+        // Make sure we're running under Windows 2000 or later
+        if (Win2000OrLater)
+        {
+            FLASHWINFO fi = CreateFlashInfoStruct(hwnd, FLASHW_ALL | FLASHW_TIMERNOFG, uint.MaxValue, 0);
+
+            return FlashWindowEx(ref fi);
+        }
+        return false;
+    }
+
+    private static FLASHWINFO CreateFlashInfoStruct(IntPtr handle, uint flags, uint count, uint timeout)
+    {
+        FLASHWINFO fi = new FLASHWINFO();
+        fi.cbSize = Convert.ToUInt32(Marshal.SizeOf(fi));
+        fi.hwnd = handle;
+        fi.dwFlags = flags;
+        fi.uCount = count;
+        fi.dwTimeout = timeout;
+        return fi;
+    }
+
+    /// <summary>
+    /// Flash the specified Window (form) for the specified number of times
+    /// </summary>
+    /// <param name="hwnd">The handle of the Window to Flash.</param>
+    /// <param name="count">The number of times to Flash.</param>
+    /// <returns></returns>
+    public static bool Flash(IntPtr hwnd, uint count)
+    {
+        if (Win2000OrLater)
+        {
+            FLASHWINFO fi = CreateFlashInfoStruct(hwnd, FLASHW_ALL | FLASHW_TIMERNOFG, count, 0);
+
+            return FlashWindowEx(ref fi);
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// A boolean value indicating whether the application is running on Windows 2000 or later.
+    /// </summary>
+    private static bool Win2000OrLater
+    {
+        get { return Environment.OSVersion.Version.Major >= 5; }
+    }
+}
 
 namespace InstantMessenger
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    
     public partial class MainWindow : Window
     {
+        FlashWindowHelper helper = new FlashWindowHelper(Application.Current);
+
         public IMClient im = new IMClient();
         public MainWindow()
         {
@@ -237,6 +393,16 @@ namespace InstantMessenger
         {
             Message mes = new Message(){Id=-1,Id_from=e.user,Id_whom=im.ContactList.Find(p=> p.Id>-1).Id_user,Mess_text=e.msg,Magic_pointer=e.Magic_pointer,Mess_date=e.mess_date};
             im.Messages.Add(mes);
+            Dispatcher.BeginInvoke(new ThreadStart(delegate
+            {
+                String name_of_recipient = im.ContactList.Find(p => p.Id_contact == mes.Id_from).Name_for_user;
+                if (trv_ContactList.SelectedItem.ToString() != name_of_recipient)
+                {
+                    MessageBox.Show("New message from" + name_of_recipient);
+                    im.UnreadMessages.Add(name_of_recipient);
+                }
+            }));
+            if (im.UnreadMessages.Count != 0) helper.FlashApplicationWindow();
             refreshHistory();
         }
         void im_ProfileSave(object sender, ProfileReceivedEventArgs e)
@@ -385,6 +551,8 @@ namespace InstantMessenger
                         txb_History.Text = txb_History.Text + "Me (" + msg.Mess_date + ")\n" + msg.Mess_text+"\n";
                     else txb_History.Text = txb_History.Text + recipient.Name_for_user + " (" + msg.Mess_date + ")\n" + msg.Mess_text+"\n";
                 });
+                im.UnreadMessages.Remove(recipient.Name_for_user);
+                if (im.UnreadMessages.Count == 0) helper.StopFlashing();
             }
         }
         public void refreshHistory()

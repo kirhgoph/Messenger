@@ -25,6 +25,7 @@ namespace InstantMessenger
         public string Server { get { return "localhost"; } }  // Address of server. In this case - local IP address.
         public int Port { get { return 2000; } }
 
+        public List<String> UnreadMessages = new List<String>();
         public List<Contact> ContactList = new List<Contact>();
         public List<Message> Messages = new List<Message>();
         public List<Privacy_record> SeeingList = new List<Privacy_record>();
