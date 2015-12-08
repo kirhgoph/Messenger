@@ -396,13 +396,13 @@ namespace InstantMessenger
             Dispatcher.BeginInvoke(new ThreadStart(delegate
             {
                 String name_of_recipient = im.ContactList.Find(p => p.Id_contact == mes.Id_from).Name_for_user;
-                if (trv_ContactList.SelectedItem.ToString() != name_of_recipient)
+                if ((trv_ContactList.SelectedItem == null) || (trv_ContactList.SelectedItem.ToString() != name_of_recipient))
                 {
-                    MessageBox.Show("New message from" + name_of_recipient);
                     im.UnreadMessages.Add(name_of_recipient);
+                    if (im.UnreadMessages.Count != 0) helper.FlashApplicationWindow();
+                    MessageBox.Show("New message from " + name_of_recipient);
                 }
             }));
-            if (im.UnreadMessages.Count != 0) helper.FlashApplicationWindow();
             refreshHistory();
         }
         void im_ProfileSave(object sender, ProfileReceivedEventArgs e)
