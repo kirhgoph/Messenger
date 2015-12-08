@@ -70,6 +70,7 @@ namespace InstantMessengerServer
                                     Logging.Birth_date = new DateTime(1900, 1, 1);
                                     Logging.First_Name = "";
                                     Logging.Last_name = "";
+                                    Logging.Connection = this;
                                     prog.SaveUsers(Logging);
                                     prog.Users.Add(Logging);
                                     bw.Write(IM_OK);
@@ -146,6 +147,8 @@ namespace InstantMessengerServer
                         int Magic_pointer =br.ReadInt32();
                         string mess_date = br.ReadString();
                         Message mes = new Message() { Id = prog.Messages.Count, Id_from = Logging.Id, Id_whom = to, Mess_text = text, Mess_date = mess_date };
+                        prog.Messages.Add(mes);
+                        prog.SaveMessages(mes);
                         User recipient = prog.Users.Find(p => p.Id == to); ;
                                 // Write received packet to recipient
                                 recipient.Connection.bw.Write(IM_Received);
@@ -173,7 +176,9 @@ namespace InstantMessengerServer
                     }
                     else if (type == IM_ChangeStatus)
                     {
-                        Logging.Status=Logging.Status%10+(br.ReadInt32()+1)*10;
+                        int stat = br.ReadInt32();
+                        if (stat != -1) Logging.Status = Logging.Status % 10 + (stat + 1) * 10;
+                        else Logging.Status = 0;
                         prog.EditUsers(Logging);
                         prog.Contacts.FindAll(p => p.Id_contact == Logging.Id).ForEach(delegate(Contact cnt)
                         {
@@ -214,7 +219,7 @@ namespace InstantMessengerServer
                     {
                         String Login = br.ReadString();
                         String NameForUser = br.ReadString();
-                        Contact cont = new Contact { Id = prog.Contacts.Count, Id_user = Logging.Id, Id_contact = prog.FindLogin(Login).Id, Id_grupp = 0, Name_for_user = NameForUser };
+                        Contact cont = new Contact { Id = prog.Contacts.Count+(new Random().Next(1000)), Id_user = Logging.Id, Id_contact = prog.FindLogin(Login).Id, Id_grupp = 0, Name_for_user = NameForUser };
                         prog.SaveContacts(cont);
                         prog.Contacts.Add(cont);
                         bw.Write(IM_RefreshContactList);
@@ -222,7 +227,8 @@ namespace InstantMessengerServer
                     }
                     else if (type == IM_DeleteContact)
                     {
-                        Contact cnt = prog.Contacts.Find(p => p.Name_for_user == br.ReadString());
+                        String str = br.ReadString();
+                        Contact cnt = prog.Contacts.Find(p => p.Name_for_user == str);
                         prog.Contacts.Remove(cnt);
                         prog.DeleteContact(cnt.Id);
                         Privacy_record prv = new Privacy_record(){Id=0, Id_user=Logging.Id,Id_contact=cnt.Id};
@@ -278,15 +284,15 @@ namespace InstantMessengerServer
                         switch (privacyType)
                         {
                             case "Seeing":
-                                prv.Id = prog.Seeing.Count;
+                                prv.Id = prog.Seeing.Count + (new Random().Next(1000));
                                 prog.Seeing.Add(prv);
                                 break;
                             case "Unseeing":
-                                prv.Id = prog.Unseeing.Count;
+                                prv.Id = prog.Unseeing.Count + (new Random().Next(1000));
                                 prog.Unseeing.Add(prv);
                                 break;
                             case "Ignoring":
-                                prv.Id = prog.Ignoring.Count;
+                                prv.Id = prog.Ignoring.Count + (new Random().Next(1000));
                                 prog.Ignoring.Add(prv);
                                 break;
                         }
@@ -368,9 +374,18 @@ namespace InstantMessengerServer
         public void RefreshMessagesList()
         {
             List<Message> MessageList_from = prog.Messages.FindAll(p => (p.Id_from == Logging.Id));
-            List<Message> MessageList_whom = prog.Messages.FindAll(p => (p.Id_from == Logging.Id));
+            List<Message> MessageList_whom = prog.Messages.FindAll(p => (p.Id_whom == Logging.Id));
             bw.Write(MessageList_from.Count+MessageList_from.Count);
             MessageList_from.ForEach(delegate(Message mes)
+            {
+                bw.Write(mes.Id);
+                bw.Write(mes.Id_from);
+                bw.Write(mes.Id_whom);
+                bw.Write(mes.Magic_pointer);
+                bw.Write(mes.Mess_text);
+                bw.Write(mes.Mess_date);
+            });
+            MessageList_whom.ForEach(delegate(Message mes)
             {
                 bw.Write(mes.Id);
                 bw.Write(mes.Id_from);

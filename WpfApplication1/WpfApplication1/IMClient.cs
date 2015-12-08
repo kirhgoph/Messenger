@@ -74,6 +74,7 @@ namespace InstantMessenger
         {
             bw.Write(IM_DeleteContact);
             bw.Write(str);
+            bw.Flush();
         }
         public void ChangeStatus(int stat)
         {
@@ -213,6 +214,11 @@ namespace InstantMessenger
         BinaryReader br;
         BinaryWriter bw;
 
+        int SortById(Message x, Message y)
+        {
+            if (x.Id > y.Id) return 1;
+            else return -1;
+        }
         void RefreshMessagesList()
         {
             Messages = new List<Message>();
@@ -222,6 +228,7 @@ namespace InstantMessenger
                 Message mes = new Message { Id = br.ReadInt32(), Id_from = br.ReadInt32(), Id_whom = br.ReadInt32(), Magic_pointer = br.ReadInt32(), Mess_text = br.ReadString(), Mess_date = br.ReadString() };
                 Messages.Add(mes);
             }
+            Messages.Sort(SortById);
         }
         void RefreshContactList()
         {

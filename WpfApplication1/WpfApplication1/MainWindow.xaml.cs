@@ -413,6 +413,8 @@ namespace InstantMessenger
         private void Registration_Click(object sender, RoutedEventArgs e)
         {
             im.Register(txt_Login.Text, txt_Password.Text);
+            txt_Login.Text = "";
+            txt_Password.Text = "";
         }
 
         private void LogIn_Click(object sender, RoutedEventArgs e)
@@ -432,6 +434,7 @@ namespace InstantMessenger
         }
         private void btn_LogOut_Click(object sender, RoutedEventArgs e)
         {
+            im.ChangeStatus(-1);
             im.Disconnect();
         }
         private void cBox_Status_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -540,20 +543,7 @@ namespace InstantMessenger
 
         private void trv_ContactList_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            txb_History.Text = "";
-            if (e.NewValue != null)
-            {
-                Contact recipient = im.ContactList.Find(p => p.Name_for_user == e.NewValue);
-                btn_OtherProfile.IsEnabled = true;
-                im.Messages.FindAll(p => (p.Id_from == recipient.Id_contact) || (p.Id_whom == recipient.Id_contact)).ForEach(delegate(Message msg)
-                {
-                    if (msg.Id_from == recipient.Id_user)
-                        txb_History.Text = txb_History.Text + "Me (" + msg.Mess_date + ")\n" + msg.Mess_text+"\n";
-                    else txb_History.Text = txb_History.Text + recipient.Name_for_user + " (" + msg.Mess_date + ")\n" + msg.Mess_text+"\n";
-                });
-                im.UnreadMessages.Remove(recipient.Name_for_user);
-                if (im.UnreadMessages.Count == 0) helper.StopFlashing();
-            }
+            refreshHistory();
         }
         public void refreshHistory()
         {
@@ -564,12 +554,14 @@ namespace InstantMessenger
             {
                 Contact recipient = im.ContactList.Find(p => p.Name_for_user == trv_ContactList.SelectedItem.ToString());
                 btn_OtherProfile.IsEnabled = true;
-                im.Messages.FindAll(p => (p.Id_from == recipient.Id_contact) || (p.Id_whom == recipient.Id_contact)).ForEach(delegate(Message msg)
+                im.Messages.FindAll(p => ((p.Id_from == recipient.Id_contact)&&(p.Id_whom==recipient.Id_user)) || ((p.Id_whom == recipient.Id_contact)&&(p.Id_from==recipient.Id_user))).ForEach(delegate(Message msg)
                 {
                     if (msg.Id_from == recipient.Id_user)
                         txb_History.Text = txb_History.Text + "Me (" + msg.Mess_date + ")\n" + msg.Mess_text + "\n";
                     else txb_History.Text = txb_History.Text + recipient.Name_for_user + " (" + msg.Mess_date + ")\n" + msg.Mess_text + "\n";
                 });
+                im.UnreadMessages.Remove(recipient.Name_for_user);
+                if (im.UnreadMessages.Count == 0) helper.StopFlashing();
             }
             ScrollViewer.ScrollToEnd();
             }));
@@ -577,12 +569,18 @@ namespace InstantMessenger
 
         private void txb_Message_GotFocus(object sender, RoutedEventArgs e)
         {
-            txb_Message.Text = "";
+            if (txb_Message.Text=="Type your message here:") txb_Message.Text= "";
+            btn_Send.IsEnabled = false;
         }
 
         private void btn_Send_Click(object sender, RoutedEventArgs e)
         {
             im.SendMessage(txb_Message.Text, trv_ContactList.SelectedItem.ToString(),0);
+        }
+
+        private void txb_Message_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (trv_ContactList!=null) if (trv_ContactList.SelectedItem != null) if (txb_Message != null) if (im.ContactList.Find(p => p.Name_for_user == trv_ContactList.SelectedItem.ToString()).status != 0) btn_Send.IsEnabled = true;
         }
 
 

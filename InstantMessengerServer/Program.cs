@@ -78,8 +78,8 @@ namespace InstantMessengerServer
         }
         public void SaveUsers(User user)
         {
-            string com = "INSERT into [Messenger].[dbo].[User] (Id, Pass_hash,Login,[e-mail],Status,Birth_date) values(" + user.Id + "," + user.Pass_hash + "," + user.Login + "," + user.e_mail + "," + user.Status + ",convert(datetime,'" + user.Birth_date.ToString("yyyy-MM-dd HH:mm:ss") + "',20));";
-            SqlCommand myCommand = new SqlCommand("INSERT into [Messenger].[dbo].[User] (Id, Pass_hash,Login,[e-mail],Status,Birth_date) values(" + user.Id + "," + user.Pass_hash + "," + user.Login + "," + user.e_mail + "," + user.Status + ",convert(datetime,'" + user.Birth_date.ToString("yyyy-MM-dd HH:mm:ss") + "',20));", SQLConnection);
+            string com = "INSERT into [Messenger].[dbo].[User] (Id, Pass_hash,Login,[e-mail],Status,Birth_date) values(" + user.Id + ",'" + user.Pass_hash + "','" + user.Login + "','" + user.e_mail + "'," + user.Status + ",convert(datetime,'" + user.Birth_date.ToString("yyyy-MM-dd HH:mm:ss") + "',20));";
+            SqlCommand myCommand = new SqlCommand(com, SQLConnection);
             try
             {
                 myCommand.ExecuteNonQuery();
@@ -96,8 +96,8 @@ namespace InstantMessengerServer
         public void EditUsers(User user)
         {
             string Birthdate_str = user.Birth_date.ToString("yyyy-MM-dd HH:mm:ss");
-            string com = "UPDATE [Messenger].[dbo].[User] SET [Status]=" + user.Status +",[First_Name] = '" + user.First_Name + "',[Last_name] = '" + user.Last_name + "',[Birth_date] = convert(datetime,'" + Birthdate_str + "',20) WHERE [Login]=" + user.Login;
-            SqlCommand myCommand = new SqlCommand("UPDATE [Messenger].[dbo].[User] SET [Status]=" + user.Status + ",[First_Name] = '" + user.First_Name + "',[Last_name] = '" + user.Last_name + "',[Birth_date] = convert(datetime,'" + Birthdate_str + "',20) WHERE [Login]=" + user.Login, SQLConnection);
+            string com = "UPDATE [Messenger].[dbo].[User] SET [Status]=" + user.Status +",[First_Name] = '" + user.First_Name + "',[Last_name] = '" + user.Last_name + "',[Birth_date] = convert(datetime,'" + Birthdate_str + "',20) WHERE [Login]='" + user.Login+"';";
+            SqlCommand myCommand = new SqlCommand(com, SQLConnection);
             try
             {
                 myCommand.ExecuteNonQuery();
@@ -137,6 +137,19 @@ namespace InstantMessengerServer
             try
             {
             myCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+        public void SaveMessages(Message mes)
+        {
+            String com = "INSERT into [Messenger].[dbo].[Mess] (Id,Id_from,Id_whom,Magic_pointer,Mess_text,Mess_date) values("+Messages.Count+"," + mes.Id_from + "," + mes.Id_whom+ "," + mes.Magic_pointer + ",'" + mes.Mess_text + "','"+mes.Mess_date+"');";
+            SqlCommand myCommand = new SqlCommand(com, SQLConnection);
+            try
+            {
+                myCommand.ExecuteNonQuery();
             }
             catch (Exception e)
             {
