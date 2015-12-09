@@ -10,7 +10,7 @@
         <Button x:Name="btn_AddcontactOk" Content="Ok" HorizontalAlignment="Left" Height="21" Margin="160,260,0,0" VerticalAlignment="Top" Width="40" IsEnabled="False" Click="btn_AddcontactOk_Click"/>
         <Button Content="Cancel" HorizontalAlignment="Left" Height="21" Margin="205,260,0,0" VerticalAlignment="Top" Width="60" IsCancel="True" Click="Button_Click"/>
         <Label x:Name="lbl_NameForUser" Content="Name for you" HorizontalAlignment="Left" Margin="10,219,0,0" VerticalAlignment="Top" Width="100"/>
-        <TextBox x:Name="tbx_NameForUser" HorizontalAlignment="Left" Height="23" Margin="145,222,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.699,0.936"/>
+        <TextBox x:Name="tbx_NameForUser" HorizontalAlignment="Left" Height="23" Margin="145,222,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.699,0.936" TextChanged="tbx_NameForUser_TextChanged"/>
 
     </Grid>
 </Window>

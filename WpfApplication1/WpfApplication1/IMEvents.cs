@@ -60,9 +60,9 @@ namespace InstantMessenger
     }
     public class AddContactResultEventArgs : EventArgs
     {
-        public string result { get; set; }
+        public List<String> result { get; set; }
 
-        public AddContactResultEventArgs(string result)
+        public AddContactResultEventArgs(List<String> result)
         {
             this.result = result;
         }

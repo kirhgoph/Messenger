@@ -207,13 +207,13 @@ namespace InstantMessengerServer
                     else if (type == IM_AddcontactSearch)
                     {
                         bw.Write(IM_AddcontactResult);
-                        User result = prog.FindLogin(br.ReadString());
-                        if (result != null)
-                        {
-                            bw.Write(1);
-                            bw.Write(result.Login);
-                        }
-                        else bw.Write(0);
+                        String login = br.ReadString();
+                        List<User>result = prog.Users.FindAll(p=> p.Login.ToLower().Contains(login.ToLower()));
+                            bw.Write(result.Count);
+                            result.ForEach(delegate(User usr) 
+                            {
+                                bw.Write(usr.Login); 
+                            });
                     }
                     else if (type == IM_AddcontactAdd)
                     {
@@ -375,7 +375,7 @@ namespace InstantMessengerServer
         {
             List<Message> MessageList_from = prog.Messages.FindAll(p => (p.Id_from == Logging.Id));
             List<Message> MessageList_whom = prog.Messages.FindAll(p => (p.Id_whom == Logging.Id));
-            bw.Write(MessageList_from.Count+MessageList_from.Count);
+            bw.Write(MessageList_from.Count+MessageList_whom.Count);
             MessageList_from.ForEach(delegate(Message mes)
             {
                 bw.Write(mes.Id);

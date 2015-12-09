@@ -366,10 +366,14 @@ namespace InstantMessenger
                         }
                         else if (type == IM_AddcontactResult)
                         {
-                            if (br.ReadInt32() != 0)
+                            List<String> result = new List<String>();
+                            int resultLength = br.ReadInt32();
+                            for (int i=0;i<resultLength;i++)
                             {
-                                OnAddcontactResult(new AddContactResultEventArgs(br.ReadString()));
+                                result.Add(br.ReadString());
                             }
+
+                                OnAddcontactResult(new AddContactResultEventArgs(result));
                             //OnAddcontactResult(new AddContactResultEventArgs(null));
                         }
                         else if (type == IM_RefreshContactList)

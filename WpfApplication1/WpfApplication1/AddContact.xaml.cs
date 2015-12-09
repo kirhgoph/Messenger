@@ -45,8 +45,11 @@ namespace InstantMessenger
         {
             Dispatcher.BeginInvoke(new ThreadStart(delegate
             {
-                lbl_NameForUser.Content = e.result;
-                lbx_SearchResult.Items.Add(e.result);
+                tbx_NameForUser.Text = e.result.Find(p=> p.Length>-1);
+                e.result.ForEach(delegate(String str)
+                {
+                    lbx_SearchResult.Items.Add(str);
+                });
             }));
         }
         private void btn_AddContact_Search_Click(object sender, RoutedEventArgs e)
@@ -70,6 +73,7 @@ namespace InstantMessenger
                 btn_AddcontactOk.IsEnabled=true;
             }
             else btn_AddcontactOk.IsEnabled = false;
+            tbx_NameForUser.Text = lbx_SearchResult.SelectedItem.ToString();
         }
 
         private void tbx_SearchString_TextChanged(object sender, TextChangedEventArgs e)
@@ -83,6 +87,11 @@ namespace InstantMessenger
         {
             OnAddcontactAdd(new AddContactAddEventArgs(lbx_SearchResult.SelectedItem.ToString(), tbx_NameForUser.Text));
             this.Close();
+        }
+
+        private void tbx_NameForUser_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (tbx_NameForUser.Text.Length > 50) tbx_NameForUser.Text = tbx_NameForUser.Text.Substring(0, 50);
         }
     }
 }
