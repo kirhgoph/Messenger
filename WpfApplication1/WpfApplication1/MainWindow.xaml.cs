@@ -435,6 +435,7 @@ namespace InstantMessenger
         private void btn_LogOut_Click(object sender, RoutedEventArgs e)
         {
             trv_ContactList.Items.Clear();
+            trv_Statuses.Items.Clear();
             txb_History.Text = "";
             im.ChangeStatus(-1);
             im.Disconnect();

@@ -8,8 +8,8 @@
         <Label Content="Last Name" HorizontalAlignment="Left" Height="25" Margin="10,70,-2,-71" VerticalAlignment="Top" Width="70"/>
         <Label Content="Birthdate" HorizontalAlignment="Left" Height="25" Margin="10,100,-2,-101" VerticalAlignment="Top" Width="70"/>
         <DatePicker x:Name="dpckr_Profile_BirthDate" HorizontalAlignment="Left" Height="24" Margin="85,101,-112,-101" VerticalAlignment="Top" Width="100"/>
-        <TextBox x:Name="tbx_Profile_FirstName" HorizontalAlignment="Left" Height="23" Margin="85,45,-85,-42" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="73"/>
-        <TextBox x:Name="tbx_Profile_LastName" HorizontalAlignment="Left" Height="23" Margin="85,74,-85,-71" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="73"/>
+        <TextBox x:Name="tbx_Profile_FirstName" HorizontalAlignment="Left" Height="23" Margin="85,45,-85,-42" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="73" TextChanged="tbx_Profile_FirstName_TextChanged_1"/>
+        <TextBox x:Name="tbx_Profile_LastName" HorizontalAlignment="Left" Height="23" Margin="85,74,-85,-71" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="73" TextChanged="tbx_Profile_LastName_TextChanged"/>
         <Button Content="Cancel" Height="24" Margin="112,130,-112,-128" VerticalAlignment="Top" IsCancel="True" Click="Button_Click"/>
         <Button x:Name="btn_SaveProfile" Content="Save" HorizontalAlignment="Left" Height="24" Margin="34,130,-34,-128" VerticalAlignment="Top" Width="73" Click="btn_SaveProfile_Click"/>
     </Grid>

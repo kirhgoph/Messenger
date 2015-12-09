@@ -220,6 +220,7 @@ namespace InstantMessengerServer
                         String Login = br.ReadString();
                         String NameForUser = br.ReadString();
                         Contact cont = new Contact { Id = prog.Contacts.Count+(new Random().Next(1000)), Id_user = Logging.Id, Id_contact = prog.FindLogin(Login).Id, Id_grupp = 0, Name_for_user = NameForUser };
+                        while (prog.Contacts.Find(p => p.Id == cont.Id) != null) cont.Id = prog.Contacts.Count + (new Random().Next(1000));
                         prog.SaveContacts(cont);
                         prog.Contacts.Add(cont);
                         bw.Write(IM_RefreshContactList);
@@ -285,14 +286,17 @@ namespace InstantMessengerServer
                         {
                             case "Seeing":
                                 prv.Id = prog.Seeing.Count + (new Random().Next(1000));
+                                while (prog.Seeing.Find(p=>p.Id==prv.Id)!=null) prv.Id=prog.Seeing.Count + (new Random().Next(1000));
                                 prog.Seeing.Add(prv);
                                 break;
                             case "Unseeing":
                                 prv.Id = prog.Unseeing.Count + (new Random().Next(1000));
+                                while (prog.Unseeing.Find(p=>p.Id==prv.Id)!=null) prv.Id=prog.Unseeing.Count + (new Random().Next(1000));
                                 prog.Unseeing.Add(prv);
                                 break;
                             case "Ignoring":
                                 prv.Id = prog.Ignoring.Count + (new Random().Next(1000));
+                                while (prog.Ignoring.Find(p => p.Id == prv.Id) != null) prv.Id = prog.Ignoring.Count + (new Random().Next(1000));
                                 prog.Ignoring.Add(prv);
                                 break;
                         }

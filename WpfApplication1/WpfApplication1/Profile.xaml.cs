@@ -46,5 +46,15 @@ namespace InstantMessenger
             this.Close();
         }
 
+        private void tbx_Profile_FirstName_TextChanged_1(object sender, TextChangedEventArgs e)
+        {
+            if (tbx_Profile_FirstName.Text.Length > 50) tbx_Profile_FirstName.Text = tbx_Profile_FirstName.Text.Substring(0, 50);
+        }
+
+        private void tbx_Profile_LastName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (tbx_Profile_LastName.Text.Length > 50) tbx_Profile_LastName.Text = tbx_Profile_LastName.Text.Substring(0, 50);
+        }
+
     }
 }
